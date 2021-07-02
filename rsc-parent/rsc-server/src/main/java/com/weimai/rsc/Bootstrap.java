@@ -7,6 +7,7 @@ import com.weimai.rsc.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -46,19 +47,7 @@ public class Bootstrap {
                     //NioServerSocketChannel用于实例化新通道来接收传入的连接
                     .channel(NioServerSocketChannel.class)
                     //ChannelInitializer用于配置新通道
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
-                            //通过ChannelPipeline添加处理类ChannelHandler
-                            //通常有很多处理类，可以将这个内部类new ChannelInitializer提为一个独立的类
-                            ByteBuf delemiter = Unpooled.buffer();
-                            delemiter.writeBytes(Suffix.LINE_FEED.getBytes(StandardCharsets.UTF_8));
-                            ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new DelimiterBasedFrameDecoder(1024*1024, delemiter)).addLast(new NettyServerHandler())
-
-                            ;
-                        }
-                    })
+                    .childHandler(new MyChannelInitializer())
                     //ChannelOption和ChannelConfig可以设置各种参数
                     .option(ChannelOption.SO_BACKLOG, 128)
                     //option()用于接受传入连接的NioServerSocketChannel,childOption()用于父ServerChannel接受的通道
@@ -78,5 +67,16 @@ public class Bootstrap {
             worker.shutdownGracefully();
         }
 
+    }
+
+    static class MyChannelInitializer extends ChannelInitializer<SocketChannel> {
+
+        @Override
+        protected void initChannel(SocketChannel channel) throws Exception {
+            ChannelPipeline pipeline = channel.pipeline();
+            pipeline.addLast(new MessageEncoder())
+                    .addLast(new MessageDecoder())
+                    .addLast(new NettyServerHandler());
+        }
     }
 }

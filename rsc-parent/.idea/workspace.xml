@@ -4,7 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a83dc9ac-b10a-4f09-9ded-f958ba20f4c1" name="Default Changelist" comment="" />
+    <list default="true" id="a83dc9ac-b10a-4f09-9ded-f958ba20f4c1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/pool/SendExecutorPool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MessageProtocol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolBody.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolHead.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/util/HessianUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/SqlExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/RSCClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/RSCClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/SendClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/SendClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/Bootstrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/Bootstrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/handler/NettyServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/handler/NettyServerHandler.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +35,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -34,6 +56,7 @@
     </option>
   </component>
   <component name="ProjectId" id="1u437snaAbHeuVB5hPgBWq9MQTK" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="false" />
@@ -43,9 +66,10 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -59,13 +83,13 @@
       <recent name="D:\idea_project\rsc-parent\rsc-server\src\main\java\com\weimai\rsc" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Bootstrap">
+  <component name="RunManager" selected="Application.StartMain">
     <configuration name="Bootstrap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.weimai.rsc.Bootstrap" />
       <module name="rsc-server" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.weimai.rsc.*" />
+          <option name="PATTERN" value="com.weimai.rsc.msg.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -78,7 +102,7 @@
       <module name="rsc-api" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.weimai.rsc.*" />
+          <option name="PATTERN" value="com.weimai.rsc.msg.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -86,23 +110,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Bootstrap" />
         <item itemvalue="Application.StartMain" />
+        <item itemvalue="Application.Bootstrap" />
       </list>
     </recent_temporary>
   </component>
@@ -116,19 +138,52 @@
       <updated>1623910872480</updated>
       <workItem from="1623910876096" duration="12401000" />
       <workItem from="1624241891698" duration="23081000" />
+      <workItem from="1624413632216" duration="1407000" />
+      <workItem from="1624452278737" duration="680000" />
+      <workItem from="1624498529540" duration="17000" />
+      <workItem from="1624958712411" duration="7740000" />
+      <workItem from="1625122014557" duration="21000" />
+      <workItem from="1625192732137" duration="15951000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/Bootstrap.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="8" />
+          <url>file://$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/RSCClient.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/handler/NettyServerHandler.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java</url>
+          <line>89</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

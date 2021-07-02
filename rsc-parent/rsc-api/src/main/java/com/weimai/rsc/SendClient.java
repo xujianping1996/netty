@@ -1,8 +1,12 @@
 package com.weimai.rsc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.weimai.rsc.constant.Suffix;
+import com.weimai.rsc.handler.MessageDecoder;
+import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -28,7 +32,7 @@ public class SendClient {
     private static final SendClient instance = new SendClient();
     EventLoopGroup client;
     Bootstrap bootstrap;
-
+    private Map<String,ChannelFuture> channelFutures = new ConcurrentHashMap();
 
     public static SendClient getInstance(){
         return instance;
@@ -41,19 +45,24 @@ public class SendClient {
         client = new NioEventLoopGroup();
         bootstrap = new io.netty.bootstrap.Bootstrap();
         bootstrap.group(client).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true).handler(
-                new ChannelInitializer<SocketChannel>() {
-                    @Override
-                    protected void initChannel(SocketChannel ch) throws Exception {
-                        ChannelPipeline p = ch.pipeline();
-                        ByteBuf delemiter = Unpooled.buffer();
-                        delemiter.writeBytes(Suffix.LINE_FEED.getBytes(StandardCharsets.UTF_8));
-                        p.addLast(new DelimiterBasedFrameDecoder(1024 * 1024, delemiter))
-                                .addLast(new NettyClientHandler());
-                    }
-                });
+                new RSCClientChannelHandler());
+    }
+    private static class RSCClientChannelHandler extends ChannelInitializer<SocketChannel>{
+        @Override
+        protected void initChannel(SocketChannel socketChannel) throws Exception {
+            ChannelPipeline pipeline = socketChannel.pipeline();
+            pipeline.addLast(new MessageDecoder());
+            pipeline.addLast(new MessageEncoder());
+            pipeline.addLast(new NettyClientHandler());
+        }
     }
     public ChannelFuture connect(String ip,int port) throws InterruptedException {
-        return bootstrap.connect(ip ,port).sync();
+        ChannelFuture sync = channelFutures.get(ip+port);
+        if (sync==null){
+            sync = bootstrap.connect(ip, port).sync();
+            channelFutures.put(ip+port,sync);
+        }
+        return sync;
     }
 
     public Bootstrap getBootstrap(){
