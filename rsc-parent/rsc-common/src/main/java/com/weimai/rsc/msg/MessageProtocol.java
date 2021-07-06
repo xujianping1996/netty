@@ -61,4 +61,10 @@ public class MessageProtocol implements Serializable {
     public void setProtocolBody(ProtocolBody protocolBody) {
         this.protocolBody = protocolBody;
     }
+
+    @Override
+    public String toString() {
+        return "MessageProtocol{" + "headLength=" + headLength + ", protocolHead=" + protocolHead + ", bodyLength="
+               + bodyLength + ", protocolBody=" + protocolBody + '}';
+    }
 }

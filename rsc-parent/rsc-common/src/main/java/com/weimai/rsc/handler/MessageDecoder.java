@@ -9,8 +9,6 @@ import com.weimai.rsc.util.HessianUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageDecoder;
-import io.netty.handler.codec.MessageToMessageEncoder;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -23,6 +21,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list)
             throws Exception {
+        System.out.println(byteBuf);
         try {
             if (byteBuf.readableBytes()<12){
                 //协议开始标识长度+请求头长度+请求体长度
@@ -67,25 +66,12 @@ public class MessageDecoder extends ByteToMessageDecoder {
             byteBuf.readBytes(body);
             ProtocolBody protocolBody = HessianUtils.read(body, ProtocolBody.class);
 
-            //// 协议内容长度
-            //int bodyLength = byteBuf.readInt();
-            //// 协议包内容数据还未到齐，回到协议开始的位置，等待数据到齐
-            //if (byteBuf.readableBytes() < bodyLength) {
-            //    byteBuf.readerIndex(begin);
-            //    return;
-            //}
-            //// 读取协议包内容数据
-            //byte[] body = new byte[bodyLength];
-            //byteBuf.readBytes(body);
             // 封装协议
             MessageProtocol messageProtocol = new MessageProtocol();
             messageProtocol.setHeadLength(headLength);
             messageProtocol.setBodyLength(bodyLength);
             messageProtocol.setProtocolHead(protocolHead);
             messageProtocol.setProtocolBody(protocolBody);
-            // 将 byte 数组转成 header
-            //RpcProtocolHeader rpcProtocolHeader = HessianUtils.read(header, RpcProtocolHeader.class);
-            //messageProtocol.setContent(body);
 
             list.add(messageProtocol);
         } catch (Exception e) {

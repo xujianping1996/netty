@@ -1,6 +1,8 @@
 package com.weimai.rsc.msg;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -26,5 +28,10 @@ public class ProtocolBody implements Serializable {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "ProtocolBody{" + "content=" + new String(content, StandardCharsets.UTF_8) + '}';
     }
 }

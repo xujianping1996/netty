@@ -27,4 +27,9 @@ public class ProtocolHead implements Serializable {
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
+
+    @Override
+    public String toString() {
+        return "ProtocolHead{" + "requestId='" + requestId + '\'' + '}';
+    }
 }

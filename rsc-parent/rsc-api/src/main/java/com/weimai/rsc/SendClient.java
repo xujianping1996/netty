@@ -1,17 +1,12 @@
 package com.weimai.rsc;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.weimai.rsc.constant.Suffix;
 import com.weimai.rsc.handler.MessageDecoder;
 import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -20,7 +15,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -37,11 +31,11 @@ public class SendClient {
     public static SendClient getInstance(){
         return instance;
     }
-    public SendClient() {
+    private SendClient() {
         initClient();
     }
 
-    public void initClient() {
+    private void initClient() {
         client = new NioEventLoopGroup();
         bootstrap = new io.netty.bootstrap.Bootstrap();
         bootstrap.group(client).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true).handler(

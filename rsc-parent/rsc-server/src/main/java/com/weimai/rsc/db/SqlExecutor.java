@@ -23,7 +23,7 @@ public class SqlExecutor {
         }
         MessageProtocol messageProtocol1 = new MessageProtocol();
         String requestId = messageProtocol.getProtocolHead().getRequestId();
-        String result = "sql,执行结果：" + requestId;
+        String result = messageProtocol.getProtocolBody().toString();
         ProtocolHead protocolHead = new ProtocolHead();
         ProtocolBody protocolBody = new ProtocolBody();
         protocolHead.setRequestId(requestId);
