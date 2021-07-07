@@ -1,16 +1,13 @@
 package com.weimai.rsc.handler;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import com.weimai.rsc.SendClient;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.pool.SendExecutorPool;
-import com.weimai.rsc.util.HessianUtils;
-import io.netty.channel.Channel;
+import com.weimai.rsc.msg.impl.MessageServiceImpl;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,49 +20,31 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @author DiZhi
  * @since 2021-06-21 20:18
  */
-public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProtocol> implements Runnable {
-    CountDownLatch countDownLatch = new CountDownLatch(1);
-    private String sql;
-    private SendClient sendClient ;
-    private ChannelFuture channelFuture;
-    //private ChannelPromise channelPromise;
+public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProtocol> {
+    private final MessageServiceImpl messageService;
 
-    public NettyClientHandler() throws InterruptedException {
-        sendClient = SendClient.getInstance();
+    public NettyClientHandler() {
+        messageService = MessageServiceImpl.getSingleInstance();
     }
 
-    public NettyClientHandler connect (String ip,int port) throws InterruptedException{
-        channelFuture = sendClient.connect(ip,port);
-        return this;
-    }
-    public Object execute(String sql){
-        this.sql = sql;
-        SendExecutorPool.execute(this);
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
 
-        return null;
+        int port = socketAddress.getPort();
+        String hostAddress = socketAddress.getAddress().getHostAddress();
+        System.out.println("已链接至"+hostAddress+":"+port);
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol)
-            throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) {
+        InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
+        //System.out.println(ip+":"+port+"已断开链接");
+        ctx.close();
+    }
+    @Override
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
         System.out.println(new String(messageProtocol.getProtocolBody().getContent(), StandardCharsets.UTF_8));
+        messageService.cacheMessage(messageProtocol);
     }
 
-    @Override
-    public void run() {
-        Channel channel = channelFuture.channel();
-        String requestId = UUID.randomUUID().toString().replace("-", "");
-        byte[] sqlBytes = sql.getBytes(StandardCharsets.UTF_8);
-        ProtocolBody protocolBody = new ProtocolBody();
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolBody.setContent(sqlBytes);
-        protocolHead.setRequestId(requestId);
-        MessageProtocol messageProtocol = new MessageProtocol();
-        messageProtocol.setProtocolBody(protocolBody);
-        messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
-        messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
-        channel.writeAndFlush(messageProtocol);
-
-    }
 }

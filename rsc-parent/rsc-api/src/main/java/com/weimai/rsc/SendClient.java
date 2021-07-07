@@ -1,20 +1,16 @@
 package com.weimai.rsc;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
-import com.weimai.rsc.handler.MessageDecoder;
-import com.weimai.rsc.handler.MessageEncoder;
-import com.weimai.rsc.handler.NettyClientHandler;
-import io.netty.bootstrap.Bootstrap;
+import com.weimai.rsc.msg.MessageProtocol;
+import com.weimai.rsc.msg.ProtocolBody;
+import com.weimai.rsc.msg.ProtocolHead;
+import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -23,44 +19,47 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @since 2021-06-17 14:38
  */
 public class SendClient {
-    private static final SendClient instance = new SendClient();
-    EventLoopGroup client;
-    Bootstrap bootstrap;
-    private Map<String,ChannelFuture> channelFutures = new ConcurrentHashMap();
+    private NettyClient nettyClient;
+    private MessageServiceImpl messageService;
+    private ChannelFuture channelFuture = null;
 
-    public static SendClient getInstance(){
-        return instance;
-    }
-    private SendClient() {
-        initClient();
+    public SendClient() {
+        nettyClient = NettyClient.getSingleInstance();
+        messageService = MessageServiceImpl.getSingleInstance();
     }
 
-    private void initClient() {
-        client = new NioEventLoopGroup();
-        bootstrap = new io.netty.bootstrap.Bootstrap();
-        bootstrap.group(client).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true).handler(
-                new RSCClientChannelHandler());
+    public SendClient connect(String ip, int port) throws InterruptedException {
+        ChannelFuture channelFuture = nettyClient.connect(ip, port);
+        this.channelFuture = channelFuture;
+        messageService.registerChannel(channelFuture);
+        return this;
     }
-    private static class RSCClientChannelHandler extends ChannelInitializer<SocketChannel>{
-        @Override
-        protected void initChannel(SocketChannel socketChannel) throws Exception {
-            ChannelPipeline pipeline = socketChannel.pipeline();
-            pipeline.addLast(new MessageDecoder());
-            pipeline.addLast(new MessageEncoder());
-            pipeline.addLast(new NettyClientHandler());
+
+    public Object execute(String message) {
+        if (channelFuture == null) {
+            throw new RuntimeException("未链接到远程服务器或已断开链接！");
         }
-    }
-    public ChannelFuture connect(String ip,int port) throws InterruptedException {
-        ChannelFuture sync = channelFutures.get(ip+port);
-        if (sync==null){
-            sync = bootstrap.connect(ip, port).sync();
-            channelFutures.put(ip+port,sync);
-        }
-        return sync;
+        MessageProtocol request = new MessageProtocol();
+        convertMsg2Protocol(message, request);
+        nettyClient.sendMessage(this.channelFuture, request);
+        MessageProtocol response = messageService.loadMessage(request.getProtocolHead().getRequestId());
+        return response;
     }
 
-    public Bootstrap getBootstrap(){
-        return this.bootstrap;
+    private void convertMsg2Protocol(String message, MessageProtocol messageProtocol) {
+        //Channel channel = channelFuture.channel();
+        String requestId = UUID.randomUUID().toString().replace("-", "");
+        byte[] sqlBytes = message.getBytes(StandardCharsets.UTF_8);
+        //封装协议头
+        ProtocolHead protocolHead = new ProtocolHead();
+        protocolHead.setRequestId(requestId);
+        //封装协议体
+        ProtocolBody protocolBody = new ProtocolBody();
+        protocolBody.setContent(sqlBytes);
+        //封装协议包
+        messageProtocol.setProtocolBody(protocolBody);
+        messageProtocol.setProtocolHead(protocolHead);
+        messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
+        messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
     }
-
 }

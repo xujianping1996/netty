@@ -1,5 +1,7 @@
 package com.weimai.rsc.handler;
 
+import java.net.InetSocketAddress;
+
 import com.weimai.rsc.db.SqlExecutor;
 import com.weimai.rsc.msg.MessageProtocol;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,13 +16,15 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProtocol> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("connected!");
+        InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
+        int port = socketAddress.getPort();
+        String hostAddress = socketAddress.getAddress().getHostAddress();
+        System.out.println(hostAddress+":"+port+"已链接成功");
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol)
             throws Exception {
-        System.out.println("接收到请求："+messageProtocol.toString());
         MessageProtocol execute = SqlExecutor.execute(messageProtocol);
         channelHandlerContext.writeAndFlush(execute);
 

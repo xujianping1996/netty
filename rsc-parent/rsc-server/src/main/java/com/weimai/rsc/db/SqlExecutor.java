@@ -1,6 +1,7 @@
 package com.weimai.rsc.db;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Random;
 
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
@@ -16,11 +17,14 @@ import com.weimai.rsc.util.HessianUtils;
 public class SqlExecutor {
 
     public static MessageProtocol execute(MessageProtocol messageProtocol){
+        Random random = new Random();
+        int s = random.nextInt(10000)%(10000-1000+1) + 1000;
         try {
-            Thread.sleep(3L);
+            Thread.sleep(s);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         MessageProtocol messageProtocol1 = new MessageProtocol();
         String requestId = messageProtocol.getProtocolHead().getRequestId();
         String result = messageProtocol.getProtocolBody().toString();
@@ -32,7 +36,7 @@ public class SqlExecutor {
         messageProtocol1.setBodyLength(HessianUtils.write(protocolBody).length);
         messageProtocol1.setProtocolBody(protocolBody);
         messageProtocol1.setProtocolHead(protocolHead);
-
+        System.out.println("请求id"+requestId+"执行了"+s+"秒");
         return messageProtocol1;
     }
 }

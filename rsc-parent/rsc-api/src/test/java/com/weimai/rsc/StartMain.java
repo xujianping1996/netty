@@ -16,8 +16,11 @@ public class StartMain {
     public static int PORT = 8088;
 
     public static void main(String[] args) throws InterruptedException {
-        NettyClientHandler rscClient = new NettyClientHandler();
-        NettyClientHandler connect = rscClient.connect(IP, PORT);
+        //NettyClientHandler rscClient = new NettyClientHandler();
+        //NettyClientHandler connect = rscClient.connect(IP, PORT);
+
+        SendClient sendClient = new SendClient();
+        sendClient.connect(IP,PORT);
         Scanner sc = new Scanner(System.in);
         //只要还有下一个
         while (sc.hasNext()) {
@@ -26,7 +29,7 @@ public class StartMain {
             //判断结束标记
             if ("over".equals(line))
                 break;
-            connect.execute(line);
+            sendClient.execute(line);
         }
         sc.close();
 
