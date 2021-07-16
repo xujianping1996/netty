@@ -1,6 +1,9 @@
 package com.weimai.rsc.msg;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+
+import com.weimai.rsc.util.HessianUtils;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -10,7 +13,7 @@ import java.io.Serializable;
  * @author DiZhi
  * @since 2021-06-29 20:48
  */
-public class MessageProtocol implements Serializable {
+public class MessageProtocol implements Serializable,Message {
 
 
     public static final int HEAD_DATE = 0x60;
@@ -34,7 +37,7 @@ public class MessageProtocol implements Serializable {
         return headLength;
     }
 
-    public void setHeadLength(int headLength) {
+    private void setHeadLength(int headLength) {
         this.headLength = headLength;
     }
 
@@ -44,13 +47,16 @@ public class MessageProtocol implements Serializable {
 
     public void setProtocolHead(ProtocolHead protocolHead) {
         this.protocolHead = protocolHead;
+        byte[] write = HessianUtils.write(protocolHead);
+        setHeadLength(write.length);
+
     }
 
     public int getBodyLength() {
         return bodyLength;
     }
 
-    public void setBodyLength(int bodyLength) {
+    private void setBodyLength(int bodyLength) {
         this.bodyLength = bodyLength;
     }
 
@@ -60,6 +66,7 @@ public class MessageProtocol implements Serializable {
 
     public void setProtocolBody(ProtocolBody protocolBody) {
         this.protocolBody = protocolBody;
+        setBodyLength(HessianUtils.write(protocolBody).length);
     }
 
     @Override

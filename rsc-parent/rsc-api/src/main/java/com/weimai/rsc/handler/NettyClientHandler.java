@@ -6,8 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CountDownLatch;
 
 import com.weimai.rsc.SendClient;
+import com.weimai.rsc.msg.DBTable;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -43,7 +45,10 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
     }
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
-        System.out.println(new String(messageProtocol.getProtocolBody().getContent(), StandardCharsets.UTF_8));
+        System.out.println(HessianUtils.read(messageProtocol.getProtocolBody().getContent(),
+                                             DBTable.class));
+        DBTable read = HessianUtils.read(messageProtocol.getProtocolBody().getContent(), DBTable.class);
+
         messageService.cacheMessage(messageProtocol);
     }
 

@@ -68,8 +68,8 @@ public class MessageDecoder extends ByteToMessageDecoder {
 
             // 封装协议
             MessageProtocol messageProtocol = new MessageProtocol();
-            messageProtocol.setHeadLength(headLength);
-            messageProtocol.setBodyLength(bodyLength);
+            //messageProtocol.setHeadLength(headLength);
+            //messageProtocol.setBodyLength(bodyLength);
             messageProtocol.setProtocolHead(protocolHead);
             messageProtocol.setProtocolBody(protocolBody);
 

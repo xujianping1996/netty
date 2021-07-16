@@ -4,22 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a83dc9ac-b10a-4f09-9ded-f958ba20f4c1" name="Default Changelist" comment="持续懵逼，要冷静下了">
-      <change afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/NettyClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/msg/MessageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/msg/impl/MessageServiceImpl.java" afterDir="false" />
+    <list default="true" id="a83dc9ac-b10a-4f09-9ded-f958ba20f4c1" name="Default Changelist" comment="1.增加同步获取响应逻辑&#10;2.增加通过请求id区分不同请求的逻辑&#10;&#10;（有点眉目了，铁子们）">
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/common/Serializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/constant/ProtocolDataType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/constant/TableColumnConstant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/DBTable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/Message.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MyMessageProtocol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/config/DBConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/executor/ServerExecuter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/repository/SransferStation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rsc-server/src/main/resources/db.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/SendClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/SendClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/pool/SendExecutorPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/pool/SendExecutorPool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/src/test/java/com/weimai/rsc/StartMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/test/java/com/weimai/rsc/StartMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/target/classes/com/weimai/rsc/SendClient$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/target/classes/com/weimai/rsc/SendClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/target/classes/com/weimai/rsc/SendClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/target/classes/com/weimai/rsc/handler/NettyClientHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/target/classes/com/weimai/rsc/handler/NettyClientHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-api/target/test-classes/com/weimai/rsc/StartMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/target/test-classes/com/weimai/rsc/StartMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/msg/impl/MessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/msg/impl/MessageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/handler/MessageDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MessageProtocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MessageProtocol.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolHead.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolHead.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rsc-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/SqlExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/SqlExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/handler/NettyServerHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/handler/NettyServerHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rsc-server/target/classes/com/weimai/rsc/handler/NettyServerHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/rsc-server/target/classes/com/weimai/rsc/handler/NettyServerHandler.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +50,18 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/config/DBConfig.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolHead.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/repository/SransferStation.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MessageProtocol.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/ProtocolBody.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/Message.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/DBTable.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/msg/MyMessageProtocol.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-common/src/main/java/com/weimai/rsc/constant/ProtocolDataType.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/executor/ServerExecuter.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -81,13 +99,26 @@
       <recent name="D:\idea_project\rsc-parent\rsc-server\src\main\java\com\weimai\rsc" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.StartMain (3)">
+  <component name="RunManager" selected="Application.DBConfig">
     <configuration name="Bootstrap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.weimai.rsc.Bootstrap" />
       <module name="rsc-server" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.weimai.rsc.msg.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DBConfig" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.weimai.rsc.db.config.DBConfig" />
+      <module name="rsc-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.weimai.rsc.db.config.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -147,28 +178,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Bootstrap" />
-      <item itemvalue="Application.StartMain" />
       <item itemvalue="Application.StartMain (1)" />
       <item itemvalue="Application.StartMain (2)" />
       <item itemvalue="Application.StartMain (3)" />
+      <item itemvalue="Application.Bootstrap" />
+      <item itemvalue="Application.StartMain" />
+      <item itemvalue="Application.DBConfig" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.DBConfig" />
         <item itemvalue="Application.StartMain" />
         <item itemvalue="Application.Bootstrap" />
       </list>
@@ -190,7 +221,13 @@
       <workItem from="1624958712411" duration="7740000" />
       <workItem from="1625122014557" duration="21000" />
       <workItem from="1625192732137" duration="16782000" />
-      <workItem from="1625474060007" duration="28666000" />
+      <workItem from="1625474060007" duration="29434000" />
+      <workItem from="1626164862998" duration="2660000" />
+      <workItem from="1626173841409" duration="4361000" />
+      <workItem from="1626225954536" duration="2302000" />
+      <workItem from="1626334318200" duration="5169000" />
+      <workItem from="1626423923951" duration="408000" />
+      <workItem from="1626424409726" duration="4592000" />
     </task>
     <task id="LOCAL-00001" summary="卧槽，越写越乱啊">
       <created>1625218060496</created>
@@ -206,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625564341456</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="1.增加同步获取响应逻辑&#10;2.增加通过请求id区分不同请求的逻辑&#10;&#10;（有点眉目了，铁子们）">
+      <created>1625649814966</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1625649814966</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -227,20 +271,33 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="卧槽，越写越乱啊" />
     <MESSAGE value="持续懵逼，要冷静下了" />
-    <option name="LAST_COMMIT_MESSAGE" value="持续懵逼，要冷静下了" />
+    <MESSAGE value="增加同步获取响应逻辑" />
+    <MESSAGE value="1.增加同步获取响应逻辑" />
+    <MESSAGE value="1.增加同步获取响应逻辑&#10;2.增加通过请求id区分不同请求的逻辑&#10;&#10;（有点眉目了，铁子们）" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.增加同步获取响应逻辑&#10;2.增加通过请求id区分不同请求的逻辑&#10;&#10;（有点眉目了，铁子们）" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java</url>
-          <line>55</line>
-          <option name="timeStamp" value="11" />
+          <line>41</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/rsc-api/src/main/java/com/weimai/rsc/handler/NettyClientHandler.java</url>
-          <line>39</line>
-          <option name="timeStamp" value="18" />
+          <line>51</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/executor/ServerExecuter.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/rsc-server/src/main/java/com/weimai/rsc/db/config/DBConfig.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -21,6 +21,14 @@
             <artifactId>netty-all</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.weimai</groupId>
             <artifactId>rsc-commen</artifactId>
             <version>1.0.1-SNAPSHOT</version>

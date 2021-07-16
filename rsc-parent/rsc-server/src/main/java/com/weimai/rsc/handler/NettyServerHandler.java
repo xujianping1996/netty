@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 
 import com.weimai.rsc.db.SqlExecutor;
 import com.weimai.rsc.msg.MessageProtocol;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -25,8 +26,10 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProto
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol)
             throws Exception {
-        MessageProtocol execute = SqlExecutor.execute(messageProtocol);
-        channelHandlerContext.writeAndFlush(execute);
+
+
+       SqlExecutor.execute(messageProtocol,channelHandlerContext.channel());
+        //channelHandlerContext.writeAndFlush(execute);
 
     }
     @Override

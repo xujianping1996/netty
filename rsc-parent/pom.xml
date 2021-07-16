@@ -17,9 +17,10 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <HikariCP.version>3.4.5</HikariCP.version>
+        <HikariCP.version>4.0.3</HikariCP.version>
         <netty-all.version>4.1.63.Final</netty-all.version>
         <hessian.version>4.0.63</hessian.version>
+        <mysql-connector-java>8.0.17</mysql-connector-java>
     </properties>
 
     <dependencyManagement>
@@ -38,6 +39,11 @@
                 <groupId>com.zaxxer</groupId>
                 <artifactId>HikariCP</artifactId>
                 <version>${HikariCP.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

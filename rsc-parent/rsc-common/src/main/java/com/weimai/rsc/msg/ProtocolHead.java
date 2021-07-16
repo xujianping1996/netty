@@ -13,6 +13,16 @@ import java.io.Serializable;
 public class ProtocolHead implements Serializable {
     private String requestId;
 
+    private byte dataType;
+
+    public byte getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(byte dataType) {
+        this.dataType = dataType;
+    }
+
     public ProtocolHead() {
     }
 

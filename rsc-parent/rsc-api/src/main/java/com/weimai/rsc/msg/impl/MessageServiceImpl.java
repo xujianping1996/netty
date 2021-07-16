@@ -114,8 +114,8 @@ public class MessageServiceImpl implements MessageService {
         //封装协议包
         messageProtocol.setProtocolBody(protocolBody);
         messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
-        messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
+        //messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
+        //messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
         //channel.writeAndFlush(messageProtocol);
     }
 
