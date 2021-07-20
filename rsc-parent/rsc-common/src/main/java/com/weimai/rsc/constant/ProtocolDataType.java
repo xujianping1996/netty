@@ -8,10 +8,18 @@ package com.weimai.rsc.constant;
  */
 public class ProtocolDataType {
 
-    public static final byte INT = 0;
+    public static final byte INT = 100;
 
-    public static final byte TABLE = 1;
+    public static final byte TABLE = 101;
 
-    public static final byte STRING = 2;
+    public static final byte STRING = 102;
+
+    public static final byte ERROR = 103;
+
+
+
+    public static final byte COMMAND_LINE_SQL = 110;
+
+    public static final byte COMMAND_LINE_HTTP_GET_URL = 111;
 
 }

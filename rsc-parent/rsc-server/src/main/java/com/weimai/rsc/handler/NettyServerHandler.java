@@ -1,10 +1,10 @@
 package com.weimai.rsc.handler;
 
 import java.net.InetSocketAddress;
-
-import com.weimai.rsc.db.SqlExecutor;
+import java.nio.charset.StandardCharsets;
+import com.weimai.rsc.executor.pool.CommandLineExecPool;
+import com.weimai.rsc.executor.sql.SqlQueryExecuter;
 import com.weimai.rsc.msg.MessageProtocol;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -26,11 +26,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProto
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol)
             throws Exception {
-
-
-       SqlExecutor.execute(messageProtocol,channelHandlerContext.channel());
-        //channelHandlerContext.writeAndFlush(execute);
-
+        CommandLineExecPool.submit(new SqlQueryExecuter(new String(messageProtocol.getProtocolBody().getContent(),
+                                                                   StandardCharsets.UTF_8), channelHandlerContext.channel(), messageProtocol.getProtocolHead().getRequestId()));
     }
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {

@@ -51,7 +51,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
             int headLength = byteBuf.readInt();
             // 协议包体长度
             int bodyLength = byteBuf.readInt();
-            // 协议包头数据还未到齐，回到协议开始的位置，等待数据到齐
+            // 协议包数据还未到齐，回到协议开始的位置，等待数据到齐
             if (byteBuf.readableBytes() < (headLength+bodyLength)) {
                 byteBuf.readerIndex(begin);
                 return;

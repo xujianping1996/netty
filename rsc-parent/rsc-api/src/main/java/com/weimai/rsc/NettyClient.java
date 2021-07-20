@@ -5,9 +5,12 @@ import java.util.concurrent.CountDownLatch;
 import com.weimai.rsc.handler.MessageDecoder;
 import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
+import com.weimai.rsc.msg.DBTable;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageService;
+import com.weimai.rsc.msg.ProtocolBody;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.util.HessianUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -67,6 +70,23 @@ public class NettyClient {
             countDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        MessageProtocol response = messageService.getResponse(messageProtocol.getProtocolHead().getRequestId());
+        ProtocolBody protocolBody = response.getProtocolBody();
+
+        byte[] content = protocolBody.getContent();
+        DBTable read = HessianUtils.read(content, DBTable.class);
+        Object[][] header = read.getHeader();
+        for (int i = 0; i < header.length; i++) {
+            System.out.print(header[i][0]+"\t\t");
+        }
+        System.out.println();
+        Object[][] data = read.getData();
+        for (Object[] datum : data) {
+            for (int i = 0; i < datum.length; i++) {
+                System.out.print(datum[i]+"\t\t");
+            }
+            System.out.println();
         }
     }
 }

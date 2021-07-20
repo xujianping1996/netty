@@ -1,4 +1,4 @@
-package com.weimai.rsc.db.config;
+package com.weimai.rsc.db.datasource.config;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -34,8 +34,8 @@ public class DBConfig {
             e.printStackTrace();
         }
         config = new HikariConfig();
-        //config.setDriverClassName("dataSource.driverClass");
-        config.setDataSourceClassName(get("dataSource.datasourceType"));
+        config.setDriverClassName(get("dataSource.driverClass"));
+        //config.setDataSourceClassName(get("dataSource.datasourceType"));
         config.setJdbcUrl(get("dataSource.jdbcUrl"));
         config.setUsername(get("dataSource.username"));
         config.setPassword(get("dataSource.password"));

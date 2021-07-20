@@ -50,6 +50,14 @@ public class MessageServiceImpl implements MessageService {
         CountDownLatch latch = locks.remove(messageProtocol.getProtocolHead().getRequestId());
         latch.countDown();
     }
+
+    public MessageProtocol getResponse(String requestId){
+        MessageProtocol messageProtocol = messageProtocols.get(requestId);
+        if (messageProtocol == null) {
+            throw new RuntimeException("响应为空！");
+        }
+        return messageProtocol;
+    }
     public MessageProtocol loadMessage(String requestId){
         return messageProtocols.remove(requestId);
     }

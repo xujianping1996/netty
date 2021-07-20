@@ -11,7 +11,6 @@ import io.netty.channel.ChannelFuture;
  * @since 2021-07-16 16:13
  */
 public interface SransferStation {
-
     ///**
     // * 缓存请求所使用的链接通道
     // * @param requestId
@@ -31,5 +30,5 @@ public interface SransferStation {
      * @param channel
      * @param message
      */
-    void sendMessageToClient(Channel channel, Message message);
+    void sendMessageToClient(Message message);
 }

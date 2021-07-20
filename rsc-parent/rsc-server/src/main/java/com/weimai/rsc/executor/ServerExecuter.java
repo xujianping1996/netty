@@ -1,14 +1,13 @@
-package com.weimai.rsc.db.executor;
+/*
+package com.weimai.rsc.executor;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.weimai.rsc.common.Serializer;
-import com.weimai.rsc.db.config.DBConfig;
+import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.db.repository.SransferStation;
 import com.weimai.rsc.msg.DBTable;
 import com.weimai.rsc.msg.Message;
@@ -23,12 +22,14 @@ import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_NAME;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
 
+*/
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  *
  * @author DiZhi
  * @since 2021-07-13 19:30
- */
+ *//*
+
 public class ServerExecuter implements Runnable, SransferStation {
     private final HikariDataSource hikariDataSource;
     private final String sql;
@@ -52,6 +53,8 @@ public class ServerExecuter implements Runnable, SransferStation {
             connection = hikariDataSource.getConnection();
             statement = connection.createStatement();
              resultSet = statement.executeQuery(sql);
+            //statement.executeLargeUpdate()
+            //statement.execute
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columns = metaData.getColumnCount();
             Object[][] tableHeaders = new Object[columns][];
@@ -64,14 +67,17 @@ public class ServerExecuter implements Runnable, SransferStation {
                 tableHeaders[i] = tableHeader;
             }
 
-            int row = resultSet.getRow();
+            //int row = resultSet.getRow();
+            resultSet.last(); //移到最后一行
+            int row = resultSet.getRow(); //得到当前行号，也就是记录数
+            resultSet.beforeFirst(); //还要用到记录集，就把指针再移到初始化的位置
             Object[][] tableData = new Object[row][columns];
             int index = -1;
             while (resultSet.next()) {
                 index ++;
                 Object [] dataRow = new Object[columns];
                 for (int i = 0; i < columns; i++) {
-                    dataRow[i] = resultSet.getObject(i);
+                    dataRow[i] = resultSet.getObject(i+1);
                 }
                 tableData[index] = dataRow;
             }
@@ -109,3 +115,4 @@ public class ServerExecuter implements Runnable, SransferStation {
         channel.writeAndFlush(message);
     }
 }
+*/
