@@ -24,7 +24,7 @@ public class DBConfig {
         properties = new Properties();
         FileInputStream inputStream = null;  //注意路径
         try {
-            inputStream = new FileInputStream("D:\\idea_project\\github\\rsc-parent\\rsc-server\\src\\main\\resources\\db.properties");
+            inputStream = new FileInputStream("D:\\IntelliJ_IDEA_2019_3\\git-workspase\\rsc-parent\\rsc-parent\\rsc-server\\src\\main\\resources\\db.properties");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

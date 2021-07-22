@@ -18,8 +18,10 @@ public class ProtocolDataType {
 
 
 
-    public static final byte COMMAND_LINE_SQL = 110;
+    public static final byte COMMAND_LINE_SQL_SELECT = 110;
 
-    public static final byte COMMAND_LINE_HTTP_GET_URL = 111;
+    public static final byte COMMAND_LINE_SQL_UPDATE = 111;
+
+    public static final byte COMMAND_LINE_HTTP_GET_URL = 112;
 
 }

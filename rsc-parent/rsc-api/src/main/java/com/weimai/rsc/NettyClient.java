@@ -62,7 +62,7 @@ public class NettyClient {
         return bootstrap.connect(ip, port).sync();
     }
 
-    public void sendMessage(ChannelFuture channelFuture, MessageProtocol messageProtocol) {
+    public MessageProtocol sendMessage(ChannelFuture channelFuture, MessageProtocol messageProtocol) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         messageService.registerLock(messageProtocol.getProtocolHead().getRequestId(), countDownLatch);
         channelFuture.channel().writeAndFlush(messageProtocol);
@@ -71,22 +71,7 @@ public class NettyClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        MessageProtocol response = messageService.getResponse(messageProtocol.getProtocolHead().getRequestId());
-        ProtocolBody protocolBody = response.getProtocolBody();
+        return messageService.getResponse(messageProtocol.getProtocolHead().getRequestId());
 
-        byte[] content = protocolBody.getContent();
-        DBTable read = HessianUtils.read(content, DBTable.class);
-        Object[][] header = read.getHeader();
-        for (int i = 0; i < header.length; i++) {
-            System.out.print(header[i][0]+"\t\t");
-        }
-        System.out.println();
-        Object[][] data = read.getData();
-        for (Object[] datum : data) {
-            for (int i = 0; i < datum.length; i++) {
-                System.out.print(datum[i]+"\t\t");
-            }
-            System.out.println();
-        }
     }
 }

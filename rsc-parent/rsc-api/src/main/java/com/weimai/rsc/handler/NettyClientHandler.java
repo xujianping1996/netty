@@ -8,6 +8,10 @@ import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
+import static com.weimai.rsc.constant.ProtocolDataType.INT;
+import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
+
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * <p>
@@ -39,9 +43,20 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
     }
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
-        System.out.println(HessianUtils.read(messageProtocol.getProtocolBody().getContent(),
-                                             DBTable.class));
-        DBTable read = HessianUtils.read(messageProtocol.getProtocolBody().getContent(), DBTable.class);
+
+
+        //switch (messageProtocol.getProtocolHead().getDataType()){
+        //    case INT:
+        //        break;
+        //    case TABLE:
+        //        System.out.println(HessianUtils.read(messageProtocol.getProtocolBody().getContent(),
+        //                                             DBTable.class));
+        //        break;
+        //    case ERROR:
+        //        break;
+        //
+        //}
+
 
         messageService.cacheMessage(messageProtocol);
     }

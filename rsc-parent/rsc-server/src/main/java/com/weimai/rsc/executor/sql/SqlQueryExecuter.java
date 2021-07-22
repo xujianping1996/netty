@@ -71,7 +71,9 @@ public class SqlQueryExecuter extends AbstractNettySqlExecuter<Object[][][]> imp
             }
             tableData[index] = dataRow;
         }
-
+        resultSet.close();
+        statement.close();
+        dbConnection.close();
         return new Object[][][] {tableHeaders, tableData};
     }
 
