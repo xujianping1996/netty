@@ -11,7 +11,7 @@ import com.weimai.rsc.msg.DBTable;
  * @author DiZhi
  * @since 2021-06-17 14:39
  */
-public class StartMain {
+public class RSCClientTest {
     //private static Logger LOGGER = LoggerFactory.getLogger(NettyClient.class);
     public static String IP = "127.0.0.1";
     public static int PORT = 8088;

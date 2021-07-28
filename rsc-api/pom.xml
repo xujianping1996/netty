@@ -22,11 +22,11 @@
         </dependency>
         <dependency>
             <groupId>com.weimai</groupId>
-            <artifactId>rsc-commen</artifactId>
+            <artifactId>rsc-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.weimai</groupId>
-            <artifactId>rsc-commen</artifactId>
+            <artifactId>rsc-common</artifactId>
             <version>1.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
