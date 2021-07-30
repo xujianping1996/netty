@@ -19,6 +19,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.base64.Base64Decoder;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -31,6 +34,7 @@ import io.netty.handler.codec.base64.Base64Decoder;
 public class Bootstrap {
     public static String IP = "127.0.0.1";
     public static int PORT = 8088;
+    private static final String DEFAULT_URL = "/httpProject";
     public static void main(String[] args) {
         //配置两个服务端的NIO线程组，一个用于接收客服端的链接，另一个用于进行SocketChannel的网络读写。
         //NioEventLoopGroup是一个处理I/O操作的多线程事件循环
@@ -72,9 +76,15 @@ public class Bootstrap {
         @Override
         protected void initChannel(SocketChannel channel) throws Exception {
             ChannelPipeline pipeline = channel.pipeline();
-            pipeline.addLast(new MessageEncoder())
-                    .addLast(new MessageDecoder())
-                    .addLast(new NettyServerHandler());
+            pipeline.addLast(new DecoderDistributor())
+                    //.addLast(new HttpRequestDecoder())
+                    //.addLast(new HttpObjectAggregator(65536))
+                    //.addLast(new HttpResponseEncoder())
+                    .addLast(new EncoderDistributor())
+
+                    //.addLast("fileServerHandler", new HttpFileServerHander(DEFAULT_URL))
+                    .addLast(new HandlerDistributor());
+
         }
     }
 }

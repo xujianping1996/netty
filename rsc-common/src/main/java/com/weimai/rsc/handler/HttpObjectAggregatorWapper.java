@@ -1,0 +1,27 @@
+package com.weimai.rsc.handler;
+
+import java.util.List;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+
+/**
+ * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
+ *
+ * @author DiZhi
+ * @since 2021-07-30 18:51
+ */
+public class HttpObjectAggregatorWapper extends HttpObjectAggregator {
+
+    public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out){
+        super.decode(ctx,in,out);
+    }
+    public HttpObjectAggregatorWapper(int maxContentLength) {
+        super(maxContentLength);
+    }
+
+    public HttpObjectAggregatorWapper(int maxContentLength, boolean closeOnExpectationFailed) {
+        super(maxContentLength, closeOnExpectationFailed);
+    }
+}

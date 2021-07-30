@@ -1,19 +1,21 @@
 package com.weimai.rsc.executor.sql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
-import com.weimai.rsc.db.datasource.config.DBConfig;
-import com.weimai.rsc.msg.DBTable;
+import com.weimai.rsc.msg.Command;
+import com.weimai.rsc.msg.content.DBTable;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
 import com.weimai.rsc.msg.ProtocolHead;
+import com.weimai.rsc.msg.content.SQL;
 import com.weimai.rsc.util.HessianUtils;
-import com.zaxxer.hikari.HikariDataSource;
 import io.netty.channel.Channel;
+import io.netty.util.internal.ObjectUtil;
 import io.netty.util.internal.StringUtil;
 
 import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
@@ -30,21 +32,34 @@ import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
  */
 public class SqlQueryExecuter extends AbstractNettySqlExecuter<Object[][][]> implements Runnable {
 
-    public SqlQueryExecuter( String sql, Channel channel, String requestId) {
-        super(DBConfig.hikariDataSource(), sql, channel, requestId);
+    public SqlQueryExecuter(SQL sql, Channel channel, String requestId) {
+        super(sql, channel, requestId);
     }
 
     @Override
-    protected Object[][][] toExecuteCommandLine(Connection dbConnection, String commandLine) throws Exception {
-        if (StringUtil.isNullOrEmpty(commandLine)) {
+    public Object[][][] execute() throws Exception {
+        SQL sql = getSql();
+        if (sql==null||StringUtil.isNullOrEmpty(sql.getSqlLine())) {
             throw new RuntimeException("待执行sql语句为空！");
         }
-
-        Object[][][] abc = new Object[1][][];
-        Statement statement = dbConnection.createStatement();
-        ResultSet resultSet = statement.executeQuery(commandLine);
-        //statement.executeLargeUpdate()
-        //statement.execute
+        Connection dbConnection = getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        if (sql.getInParams() == null) {
+            //Object[][][] abc = new Object[1][][];
+            //Statement statement = getConnection().createStatement();
+            statement = dbConnection.createStatement();
+            resultSet = statement.executeQuery(sql.getSqlLine());
+            //statement.executeLargeUpdate()
+            //statement.execute
+        }else {
+            statement = dbConnection.prepareStatement(sql.getSqlLine());
+            Object[][] params = sql.getInParams();
+            for (Object[] param : params) {
+                ((PreparedStatement)statement).setObject(Integer.parseInt(String.valueOf(param[0])), param[1]);
+            }
+            resultSet = ((PreparedStatement)statement).executeQuery();
+        }
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columns = metaData.getColumnCount();
         Object[][] tableHeaders = new Object[columns][];

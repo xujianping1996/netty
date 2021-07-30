@@ -1,22 +1,22 @@
 package com.weimai.rsc.executor.sql;
 
 import java.sql.Connection;
+import java.sql.JDBCType;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLType;
 import java.sql.Statement;
-import java.util.Map;
+import java.sql.Types;
 
-import com.weimai.rsc.db.datasource.config.DBConfig;
-import com.weimai.rsc.msg.DBTable;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
 import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.util.HessianUtils;
-import com.zaxxer.hikari.HikariDataSource;
+import com.weimai.rsc.msg.content.SQL;
 import io.netty.channel.Channel;
+import io.netty.util.internal.StringUtil;
 
 import static com.weimai.rsc.constant.ProtocolDataType.INT;
-import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -28,19 +28,35 @@ import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
  */
 public class SqlUpdateExecuter  extends AbstractNettySqlExecuter<Integer> implements  Runnable  {
 
-    public SqlUpdateExecuter(String sql, Channel channel, String requestId) {
-        super(DBConfig.hikariDataSource(), sql, channel, requestId);
+    public SqlUpdateExecuter(SQL sql, Channel channel, String requestId) {
+        super( sql, channel, requestId);
     }
 
     @Override
-    protected Integer toExecuteCommandLine(Connection dbConnection, String commandLine)
+    public Integer execute()
             throws SQLException {
-        Statement statement = dbConnection.createStatement();
-        int i = statement.executeUpdate(commandLine);
+        Connection dbConnection = getConnection();
+        SQL sql = getSql();
+        if (sql==null||StringUtil.isNullOrEmpty(sql.getSqlLine())) {
+            throw new RuntimeException("待执行sql语句为空！");
+        }
+        Statement statement;
+        int result;
+        if (sql.getInParams() == null) {
+            statement = dbConnection.createStatement();
+            result = statement.executeUpdate(sql.getSqlLine());
+        }else {
+            statement = dbConnection.prepareStatement(sql.getSqlLine());
+            Object[][] params = sql.getInParams();
+            for (Object[] param : params) {
+                ((PreparedStatement)statement).setObject(Integer.parseInt(String.valueOf(param[0])), param[1]);
+            }
+            result = ((PreparedStatement)statement).executeUpdate();
+        }
         statement.close();
         dbConnection.close();
 
-        return i;
+        return result;
     }
 
     @Override

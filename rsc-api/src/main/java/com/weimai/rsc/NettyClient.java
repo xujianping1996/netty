@@ -1,14 +1,13 @@
 package com.weimai.rsc;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 import com.weimai.rsc.handler.MessageDecoder;
 import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
-import com.weimai.rsc.msg.DBTable;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.MessageService;
-import com.weimai.rsc.msg.ProtocolBody;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.bootstrap.Bootstrap;
@@ -20,6 +19,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -71,7 +72,12 @@ public class NettyClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return messageService.getResponse(messageProtocol.getProtocolHead().getRequestId());
+        MessageProtocol response = messageService.getResponse(messageProtocol.getProtocolHead().getRequestId());
+        if (ERROR == response.getProtocolHead().getDataType()) {
+            throw new RuntimeException("server error ! info :" + Arrays
+                    .toString(HessianUtils.read(response.getProtocolBody().getContent(), StackTraceElement[].class)));
+        }
+        return response;
 
     }
 }

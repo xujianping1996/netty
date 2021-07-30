@@ -7,10 +7,12 @@ import java.util.Map;
 import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.db.repository.SransferStation;
 import com.weimai.rsc.executor.Executer;
+import com.weimai.rsc.msg.Command;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
 import com.weimai.rsc.msg.ProtocolHead;
+import com.weimai.rsc.msg.content.SQL;
 import com.weimai.rsc.util.HessianUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import io.netty.channel.Channel;
@@ -28,7 +30,7 @@ import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
 public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, SransferStation {
 
     private final HikariDataSource hikariDataSource;
-    private final String sql;
+    private final SQL sql;
     private final Channel channel;
     private final String requestId;
 
@@ -36,7 +38,7 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
         return hikariDataSource;
     }
 
-    public String getSql() {
+    public SQL getSql() {
         return sql;
     }
 
@@ -48,7 +50,7 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
         return requestId;
     }
 
-    protected AbstractNettySqlExecuter(HikariDataSource hikariDataSource, String sql, Channel channel, String requestId) {
+    protected AbstractNettySqlExecuter(SQL sql, Channel channel, String requestId) {
         this.sql = sql;
         this.hikariDataSource = DBConfig.hikariDataSource();
         this.channel = channel;
@@ -63,11 +65,7 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
 
 
     @Override
-    public T execute(String commandLine) throws Exception {
-        return toExecuteCommandLine(getConnection(), commandLine);
-    }
-
-    protected abstract T toExecuteCommandLine(Connection dbConnection,String commandLine )throws Exception;
+    public abstract T execute() throws Exception;
 
     protected abstract Message result2Message(T t);
 
@@ -87,10 +85,10 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
     }
 
     protected void toSendMessageToClient(){
-        T execute = null;
-        Message message = null;
+        T execute ;
+        Message message;
         try {
-            execute = this.execute(this.sql);
+            execute = this.execute();
             message = this.result2Message(execute);
         }catch (Exception e){
             System.out.println("执行sql异常，异常信息"+e.getMessage());

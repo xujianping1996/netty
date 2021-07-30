@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.db.repository.SransferStation;
-import com.weimai.rsc.msg.DBTable;
+import com.weimai.rsc.msg.content.DBTable;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;

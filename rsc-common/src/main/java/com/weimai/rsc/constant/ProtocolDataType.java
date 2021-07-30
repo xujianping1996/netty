@@ -16,12 +16,18 @@ public class ProtocolDataType {
 
     public static final byte ERROR = 103;
 
+    public static final byte FUNCTION_DATA = 104;
+
 
 
     public static final byte COMMAND_LINE_SQL_SELECT = 110;
 
     public static final byte COMMAND_LINE_SQL_UPDATE = 111;
 
-    public static final byte COMMAND_LINE_HTTP_GET_URL = 112;
+    public static final byte COMMAND_LINE_SQL_FUNCTION = 112;
+
+    public static final byte COMMAND_LINE_SQL_BATCH = 113;
+
+    public static final byte COMMAND_LINE_HTTP_GET_URL = 114;
 
 }

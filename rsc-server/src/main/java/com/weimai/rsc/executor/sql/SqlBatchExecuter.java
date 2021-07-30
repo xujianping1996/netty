@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.msg.Message;
+import com.weimai.rsc.msg.content.SQL;
 import io.netty.channel.Channel;
 
 /**
@@ -17,12 +18,12 @@ import io.netty.channel.Channel;
  */
 public class SqlBatchExecuter extends AbstractNettySqlExecuter<Map<String,Object[][]>> implements  Runnable {
 
-    protected SqlBatchExecuter(String sql, Channel channel, String requestId) {
-        super(DBConfig.hikariDataSource(), sql, channel, requestId);
+    protected SqlBatchExecuter(SQL sql, Channel channel, String requestId) {
+        super(sql, channel, requestId);
     }
 
     @Override
-    protected Map<String, Object[][]> toExecuteCommandLine(Connection dbConnection, String commandLine) {
+    public Map<String, Object[][]> execute() throws Exception {
         return null;
     }
 

@@ -9,6 +9,7 @@ import com.weimai.rsc.util.HessianUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.http.HttpRequestDecoder;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -21,6 +22,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list)
             throws Exception {
+        //HttpRequestDecoder
         System.out.println(byteBuf);
         try {
             if (byteBuf.readableBytes()<12){

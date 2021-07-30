@@ -16,7 +16,7 @@ import com.weimai.rsc.util.HessianUtils;
 public class MessageProtocol implements Serializable,Message {
 
 
-    public static final int HEAD_DATE = 0x60;
+    public static final int HEAD_DATE = 0xffffffff;
 
     private int headLength;
 

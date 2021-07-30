@@ -1,4 +1,4 @@
-package com.weimai.rsc.msg;
+package com.weimai.rsc.msg.content;
 
 import java.io.Serializable;
 
@@ -10,7 +10,13 @@ import java.io.Serializable;
  */
 public class DBTable implements Serializable {
 
+    /**
+     * 表头 二维数组  列名/类型
+     */
     private Object [][] header ;
+    /**
+     * 数据集
+     */
     private Object [][] data;
 
     public Object[][] getHeader() {

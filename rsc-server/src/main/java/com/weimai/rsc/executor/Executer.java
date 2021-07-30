@@ -1,5 +1,7 @@
 package com.weimai.rsc.executor;
 
+import com.weimai.rsc.msg.Command;
+
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * 命令行执行接口
@@ -7,5 +9,5 @@ package com.weimai.rsc.executor;
  * @since 2021-07-19 15:06
  */
 public interface Executer<T> {
-    T execute(String commandLine) throws Exception;
+    T execute() throws Exception;
 }
