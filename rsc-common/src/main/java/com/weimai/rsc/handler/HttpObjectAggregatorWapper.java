@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 
 /**
@@ -14,8 +15,8 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
  */
 public class HttpObjectAggregatorWapper extends HttpObjectAggregator {
 
-    public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out){
-        super.decode(ctx,in,out);
+    public void toDecode(ChannelHandlerContext ctx, HttpObject object, List<Object> out) throws Exception {
+        super.decode(ctx,object,out);
     }
     public HttpObjectAggregatorWapper(int maxContentLength) {
         super(maxContentLength);

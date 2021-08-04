@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class DBTable implements Serializable {
 
     /**
-     * 表头 二维数组  列名/类型
+     * 表头 二维数组  列名(0)/类型(1)
      */
     private Object [][] header ;
     /**

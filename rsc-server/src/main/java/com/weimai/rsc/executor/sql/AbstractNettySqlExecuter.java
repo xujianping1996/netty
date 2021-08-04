@@ -2,12 +2,11 @@ package com.weimai.rsc.executor.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 
 import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.db.repository.SransferStation;
 import com.weimai.rsc.executor.Executer;
-import com.weimai.rsc.msg.Command;
+
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
@@ -16,6 +15,7 @@ import com.weimai.rsc.msg.content.SQL;
 import com.weimai.rsc.util.HessianUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import io.netty.channel.Channel;
+
 
 import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
 

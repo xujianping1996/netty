@@ -27,7 +27,6 @@ public interface SransferStation {
 
     /**
      * 发送消息给客户端
-     * @param channel
      * @param message
      */
     void sendMessageToClient(Message message);

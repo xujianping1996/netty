@@ -6,6 +6,7 @@ import com.weimai.rsc.msg.MessageProtocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 
@@ -18,7 +19,7 @@ import io.netty.handler.codec.http.HttpRequestDecoder;
 public class DecoderDistributor extends ByteToMessageDecoder {
     private final HttpRequestDecoderWapper httpRequestDecoderWapper = new HttpRequestDecoderWapper();
     private final MessageDecoder messageDecoder = new MessageDecoder();
-    private final HttpObjectAggregator httpObjectAggregator = new HttpObjectAggregator(65536);
+    private final HttpObjectAggregatorWapper httpObjectAggregator = new HttpObjectAggregatorWapper(65536);
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         System.out.println(in);
@@ -38,7 +39,7 @@ public class DecoderDistributor extends ByteToMessageDecoder {
             }else {
                 //否则按照http协议处理
                 httpRequestDecoderWapper.decode(ctx,in,out);
-                httpObjectAggregator
+                httpObjectAggregator.toDecode(ctx, (HttpObject)out.get(out.size() - 1), out);
             }
         } catch (Exception e) {
             e.printStackTrace();

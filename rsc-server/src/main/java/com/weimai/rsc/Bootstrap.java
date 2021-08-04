@@ -76,14 +76,14 @@ public class Bootstrap {
         @Override
         protected void initChannel(SocketChannel channel) throws Exception {
             ChannelPipeline pipeline = channel.pipeline();
-            pipeline.addLast(new DecoderDistributor())
+            pipeline.addLast(new MessageEncoder())
                     //.addLast(new HttpRequestDecoder())
                     //.addLast(new HttpObjectAggregator(65536))
                     //.addLast(new HttpResponseEncoder())
-                    .addLast(new EncoderDistributor())
+                    .addLast(new MessageDecoder())
 
                     //.addLast("fileServerHandler", new HttpFileServerHander(DEFAULT_URL))
-                    .addLast(new HandlerDistributor());
+                    .addLast(new NettyServerHandler());
 
         }
     }
