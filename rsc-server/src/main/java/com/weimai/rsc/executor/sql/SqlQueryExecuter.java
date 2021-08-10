@@ -21,6 +21,8 @@ import io.netty.util.internal.StringUtil;
 import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_NAME;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
+import static com.weimai.rsc.msg.content.SQL.INDEX;
+import static com.weimai.rsc.msg.content.SQL.VALUE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -45,7 +47,7 @@ public class SqlQueryExecuter extends AbstractNettySqlExecuter<Object[][][]> imp
         Connection dbConnection = getConnection();
         Statement statement = null;
         ResultSet resultSet = null;
-        if (sql.getInParams() == null) {
+        if (sql.getParams() == null) {
             //Object[][][] abc = new Object[1][][];
             //Statement statement = getConnection().createStatement();
             statement = dbConnection.createStatement();
@@ -54,9 +56,9 @@ public class SqlQueryExecuter extends AbstractNettySqlExecuter<Object[][][]> imp
             //statement.execute
         }else {
             statement = dbConnection.prepareStatement(sql.getSqlLine());
-            Object[][] params = sql.getInParams();
+            Object[][] params = sql.getParams();
             for (Object[] param : params) {
-                ((PreparedStatement)statement).setObject(Integer.parseInt(String.valueOf(param[0])), param[1]);
+                ((PreparedStatement)statement).setObject(Integer.parseInt(String.valueOf(param[INDEX])), param[VALUE]);
             }
             resultSet = ((PreparedStatement)statement).executeQuery();
         }

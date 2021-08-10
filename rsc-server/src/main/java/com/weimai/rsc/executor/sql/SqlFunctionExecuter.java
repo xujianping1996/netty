@@ -4,7 +4,9 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
 
+import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.ProtocolBody;
@@ -20,6 +22,10 @@ import io.netty.util.internal.StringUtil;
 import static com.weimai.rsc.constant.ProtocolDataType.FUNCTION_DATA;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_NAME;
 import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
+import static com.weimai.rsc.msg.content.SQL.INDEX;
+import static com.weimai.rsc.msg.content.SQL.PARAM_TYPE;
+import static com.weimai.rsc.msg.content.SQL.SQL_PARAM_TYPE;
+import static com.weimai.rsc.msg.content.SQL.VALUE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential. 存储过程或方法sql执行者
@@ -42,30 +48,28 @@ public class SqlFunctionExecuter extends AbstractNettySqlExecuter<Object[]> impl
             throw new RuntimeException("待执行sql语句为空！");
         }
         CallableStatement callableStatement = dbConnection.prepareCall(sql.getSqlLine());
-        Object[][] inParams = sql.getInParams();
+        Object[][] params = sql.getParams();
+        ArrayList<Integer> indexs = new ArrayList<>();
         int outParamCount = 0;
-        if (Collections.isEmpty(inParams)) {
-            for (Object[] inParam : inParams) {
-                callableStatement.setObject(Integer.parseInt(String.valueOf(inParam[0])), inParam[1]);
+        if (Collections.isEmpty(params)) {
+            for (Object[] param : params) {
+                int index = Integer.parseInt(String.valueOf(param[INDEX]));
+                if (SqlParamType.IN.equals(param[SQL_PARAM_TYPE])) {
+                    callableStatement.setObject(index, param[VALUE]);
+                } else if (SqlParamType.OUT.equals(param[SQL_PARAM_TYPE])) {
+
+                    callableStatement.registerOutParameter(index, Integer.parseInt(String.valueOf(PARAM_TYPE)));
+                    indexs.add(index);
+                    outParamCount++;
+                } else if (SqlParamType.IN_OUT.equals(param[SQL_PARAM_TYPE])) {
+                    callableStatement.setObject(index, param[VALUE]);
+                    callableStatement.registerOutParameter(index, Integer.parseInt(String.valueOf(param[PARAM_TYPE])));
+                    indexs.add(index);
+                    outParamCount++;
+                }
             }
         }
-        Object[][] outParams = sql.getOutParams();
-        if (Collections.isEmpty(outParams)) {
-            for (Object[] outParam : outParams) {
-                callableStatement.registerOutParameter(Integer.parseInt(String.valueOf(outParam[0])),
-                                                       Integer.parseInt(String.valueOf(outParam[1])));
-                outParamCount++;
-            }
-        }
-        Object[][] inOutParams = sql.getInOutParams();
-        if (Collections.isEmpty(inOutParams)) {
-            for (int i = 0; i < inOutParams.length; i++) {
-                callableStatement.setObject(Integer.parseInt(String.valueOf(inOutParams[i][0])), inOutParams[i][1]);
-                callableStatement.registerOutParameter(Integer.parseInt(String.valueOf(outParams[i][0])),
-                                                       Integer.parseInt(String.valueOf(outParams[i][2])));
-                outParamCount++;
-            }
-        }
+        Object[][] outs = new Object[outParamCount][2];
         ResultSet resultSet = callableStatement.executeQuery();
         Object[][][] objects = null;
         resultSet.last(); //移到最后一行
@@ -97,30 +101,18 @@ public class SqlFunctionExecuter extends AbstractNettySqlExecuter<Object[]> impl
             }
             objects = new Object[][][] {tableHeaders, tableData};
         }
-        Object[][] resultParamObjects = null;
         if (outParamCount > 0) {
-            resultParamObjects = new Object[outParamCount][];
-            int tempIndex = 0;
-            if (Collections.isEmpty(outParams)) {
-                for (Object[] outParam : outParams) {
-                    Object o = callableStatement.getObject(Integer.parseInt(String.valueOf(outParam[0])));
-                    resultParamObjects[tempIndex] = new Object[] {outParam[0], o};
-                    tempIndex++;
-                }
-            }
-            if (Collections.isEmpty(inOutParams)) {
-                for (Object[] inOutParam : inOutParams) {
-                    Object o = callableStatement.getObject(Integer.parseInt(String.valueOf(inOutParam[0])));
-                    resultParamObjects[tempIndex] = new Object[] {inOutParam[0], o};
-                    tempIndex++;
-                }
+            for (int i = 0; i < indexs.size(); i++) {
+                Integer integer = indexs.get(i);
+                outs[i][INDEX] = indexs.get(integer);
+                outs[i][VALUE]  = callableStatement.getObject(indexs.get(integer));
             }
         }
 
         resultSet.close();
         callableStatement.close();
         dbConnection.close();
-        return new Object[] {objects, resultParamObjects};
+        return new Object[] {objects, outs};
     }
 
     @Override

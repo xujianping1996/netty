@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.weimai.rsc.SendClient;
+import com.weimai.rsc.Client;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageService;
 import com.weimai.rsc.msg.ProtocolBody;
