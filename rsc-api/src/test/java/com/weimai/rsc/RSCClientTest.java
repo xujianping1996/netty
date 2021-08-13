@@ -2,11 +2,8 @@ package com.weimai.rsc;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import com.weimai.rsc.clients.SqlQueryClient;
-import com.weimai.rsc.msg.content.DBTable;
-import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -21,13 +18,16 @@ public class RSCClientTest {
 
     public static void main(String[] args) {
         //String sql = "SELECT * FROM request_log WHERE institution_id = 100214 AND method_name = 'open_third_user'";
-        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+        while (true){
+            String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+            //String sql = "SELECT * FROM request_log WHERE institution_id = ?";
+            String method_name = "open_third_user";
+            Long institution_id = 100214L;
+            List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+            //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
+            System.out.println(execute.size());
+        }
 
-        String method_name = "open_third_user";
-        Long institution_id = 100214L;
-        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
-        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
-        System.out.println(execute.size());
     }
 
     //public static void main(String[] args) throws InterruptedException {

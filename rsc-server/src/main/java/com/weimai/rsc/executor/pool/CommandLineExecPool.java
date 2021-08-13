@@ -2,14 +2,11 @@ package com.weimai.rsc.executor.pool;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.weimai.rsc.executor.Executer;
 import com.weimai.rsc.executor.sql.AbstractNettySqlExecuter;
-import com.weimai.rsc.executor.sql.SqlQueryExecuter;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.

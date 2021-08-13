@@ -6,23 +6,21 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
-import com.weimai.rsc.msg.Command;
-import com.weimai.rsc.msg.content.DBTable;
+import com.weimai.rsc.msg.response.RespDbTable;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
+import com.weimai.rsc.msg.request.SQL;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.Channel;
-import io.netty.util.internal.ObjectUtil;
 import io.netty.util.internal.StringUtil;
 
 import static com.weimai.rsc.constant.ProtocolDataType.TABLE;
-import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_NAME;
-import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
-import static com.weimai.rsc.msg.content.SQL.INDEX;
-import static com.weimai.rsc.msg.content.SQL.VALUE;
+import static com.weimai.rsc.msg.request.SQL.INDEX;
+import static com.weimai.rsc.msg.request.SQL.VALUE;
+import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_NAME;
+import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_TYPE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -96,17 +94,17 @@ public class SqlQueryExecuter extends AbstractNettySqlExecuter<Object[][][]> imp
 
     @Override
     protected Message result2Message(Object[][][] stringMap) {
-        DBTable dbTable = new DBTable();
-        dbTable.setHeader(stringMap[0]);
-        dbTable.setData(stringMap[1]);
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolHead.setRequestId(getRequestId());
-        protocolHead.setDataType(TABLE);
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(HessianUtils.write(dbTable));
+        RespDbTable respDbTable = new RespDbTable();
+        respDbTable.setHeader(stringMap[0]);
+        respDbTable.setData(stringMap[1]);
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+        messageProtocolHead.setRequestId(getRequestId());
+        messageProtocolHead.setDataType(TABLE);
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(HessianUtils.write(respDbTable));
         MessageProtocol messageProtocol = new MessageProtocol();
-        messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setProtocolBody(protocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
 
         return messageProtocol;
     }

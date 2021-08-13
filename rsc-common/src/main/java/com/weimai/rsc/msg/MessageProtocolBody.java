@@ -11,13 +11,13 @@ import java.nio.charset.StandardCharsets;
  * @author DiZhi
  * @since 2021-07-02 14:53
  */
-public class ProtocolBody implements Serializable {
+public class MessageProtocolBody implements Serializable {
     private byte[] content;
 
-    public ProtocolBody() {
+    public MessageProtocolBody() {
     }
 
-    public ProtocolBody(byte[] content) {
+    public MessageProtocolBody(byte[] content) {
         this.content = content;
     }
 

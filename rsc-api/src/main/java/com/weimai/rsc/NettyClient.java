@@ -1,6 +1,7 @@
 package com.weimai.rsc;
 
-import java.nio.charset.StandardCharsets;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
@@ -9,6 +10,7 @@ import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.pool.ConnectedPool;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -37,6 +39,9 @@ public class NettyClient {
 
     private final Bootstrap bootstrap;
 
+
+    protected final ConnectedPool pool = ConnectedPool.pool();
+
     public static NettyClient getSingleInstance() {
         return nettyClient;
     }
@@ -63,10 +68,19 @@ public class NettyClient {
         return bootstrap.connect(ip, port).sync();
     }
 
-    public MessageProtocol sendMessage(ChannelFuture channelFuture, MessageProtocol messageProtocol) {
+    public MessageProtocol sendMessage(String ip,int port, MessageProtocol messageProtocol) {
+        ChannelFuture channelFuture = pool.getChannel(ip, port);
+        InetSocketAddress localAddress = (InetSocketAddress)channelFuture.channel().localAddress();
+        InetSocketAddress remoteAddress = (InetSocketAddress)channelFuture.channel().remoteAddress();
+        String localHostAddress = localAddress.getAddress().getHostAddress();
+        String remoteHostAddress = remoteAddress.getAddress().getHostAddress();
+        int localPort = localAddress.getPort();
+        int remotePort = remoteAddress.getPort();
         CountDownLatch countDownLatch = new CountDownLatch(1);
         messageService.registerLock(messageProtocol.getProtocolHead().getRequestId(), countDownLatch);
         channelFuture.channel().writeAndFlush(messageProtocol);
+        System.out.println("客户端["+localHostAddress+":"+localPort+"]发送消息到服务端["+remoteHostAddress+":"+remotePort+"]");
+        pool.recycleChannel(channelFuture);
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {

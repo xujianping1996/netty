@@ -8,12 +8,13 @@ import java.util.Map;
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.content.DBTable;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.response.RespDbTable;
+import com.weimai.rsc.msg.response.RespFunction;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
-import static com.weimai.rsc.msg.content.DBTable.COLUMN_NAME;
+import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_NAME;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -56,13 +57,15 @@ public class SqlQueryClient extends AbstractClient<List<Map<String, String>>> {
         super.setParam(obj, SqlParamType.IN, null);
         return this;
     }
-
+    public List<Map<String, String>> execute() {
+        return super.execute();
+    }
     @Override
     protected List<Map<String, String>> convertProtocol2JavaObj(MessageProtocol messageProtocol) {
-        ProtocolBody protocolBody = messageProtocol.getProtocolBody();
+        MessageProtocolBody messageProtocolBody = messageProtocol.getProtocolBody();
 
-        byte[] content = protocolBody.getContent();
-        DBTable read = HessianUtils.read(content, DBTable.class);
+        byte[] content = messageProtocolBody.getContent();
+        RespDbTable read = HessianUtils.read(content, RespDbTable.class);
         Object[][] header = read.getHeader();
         Object[][] data = read.getData();
         ArrayList<Map<String, String>> objects = new ArrayList<>();

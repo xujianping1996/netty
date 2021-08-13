@@ -1,8 +1,6 @@
-package com.weimai.rsc.msg.content;
+package com.weimai.rsc.msg.request;
 
 import java.io.Serializable;
-
-import com.weimai.rsc.msg.Command;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -25,10 +23,15 @@ public class SQL implements Command, Serializable {
      */
     private String sqlLine;
     /**
-     * 填充sql命令行的占位符参数 |----------------------------------------------| |    index           |   index           | ... |
-     * |----------------------------------------------| |    value           |   value           | ... |
-     * |----------------------------------------------| |    sqlParamType    |   sqlParamType    | ... |
-     * |----------------------------------------------| |    paramType       |   paramType       | ... |
+     * 填充sql命令行的占位符参数
+     * |----------------------------------------------|
+     * |    index           |   index           | ... |
+     * |----------------------------------------------|
+     * |    value           |   value           | ... |
+     * |----------------------------------------------|
+     * |    sqlParamType    |   sqlParamType    | ... |
+     * |----------------------------------------------|
+     * |    paramType       |   paramType       | ... |
      * |----------------------------------------------|
      */
     private Object[][] params;

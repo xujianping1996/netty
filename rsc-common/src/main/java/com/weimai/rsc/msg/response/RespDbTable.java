@@ -1,4 +1,4 @@
-package com.weimai.rsc.msg.content;
+package com.weimai.rsc.msg.response;
 
 import java.io.Serializable;
 
@@ -10,10 +10,11 @@ import java.io.Serializable;
  * @author DiZhi
  * @since 2021-07-16 15:41
  */
-public class DBTable implements Serializable {
+public class RespDbTable implements Serializable {
 
-    public static int COLUMN_NAME = 0;
-    public static int COLUMN_TYPE = 1;
+    public static final int COLUMN_NAME = 0;
+
+    public static final int COLUMN_TYPE = 1;
 
     /**
      * 表头 二维数组  列名(0)/类型(1)

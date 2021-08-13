@@ -1,7 +1,5 @@
 package com.weimai.rsc.executor;
 
-import com.weimai.rsc.msg.Command;
-
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * 命令行执行接口

@@ -1,11 +1,9 @@
 package com.weimai.rsc.executor.sql;
 
-import java.sql.Connection;
 import java.util.Map;
 
-import com.weimai.rsc.db.datasource.config.DBConfig;
 import com.weimai.rsc.msg.Message;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.request.SQL;
 import io.netty.channel.Channel;
 
 /**

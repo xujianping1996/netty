@@ -1,30 +1,43 @@
 package com.weimai.rsc.msg;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 import com.weimai.rsc.util.HessianUtils;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * <p>
- * 协议包
+ * 自定义协议，协议包
  *
  * @author DiZhi
  * @since 2021-06-29 20:48
  */
 public class MessageProtocol implements Serializable,Message {
 
-
+    /**
+     * 自定义协议开始标志
+     */
     public static final int HEAD_DATE = 0xffffffff;
 
+    /**
+     * 协议头长度
+     */
     private int headLength;
 
-    private ProtocolHead protocolHead;
+    /**
+     * 协议头
+     */
+    private MessageProtocolHead messageProtocolHead;
 
+    /**
+     * 协议体长度
+     */
     private int bodyLength;
 
-    private ProtocolBody protocolBody;
+    /**
+     * 协议体
+     */
+    private MessageProtocolBody messageProtocolBody;
 
     public MessageProtocol() {
     }
@@ -41,13 +54,13 @@ public class MessageProtocol implements Serializable,Message {
         this.headLength = headLength;
     }
 
-    public ProtocolHead getProtocolHead() {
-        return protocolHead;
+    public MessageProtocolHead getProtocolHead() {
+        return messageProtocolHead;
     }
 
-    public void setProtocolHead(ProtocolHead protocolHead) {
-        this.protocolHead = protocolHead;
-        byte[] write = HessianUtils.write(protocolHead);
+    public void setProtocolHead(MessageProtocolHead messageProtocolHead) {
+        this.messageProtocolHead = messageProtocolHead;
+        byte[] write = HessianUtils.write(messageProtocolHead);
         setHeadLength(write.length);
 
     }
@@ -60,18 +73,19 @@ public class MessageProtocol implements Serializable,Message {
         this.bodyLength = bodyLength;
     }
 
-    public ProtocolBody getProtocolBody() {
-        return protocolBody;
+    public MessageProtocolBody getProtocolBody() {
+        return messageProtocolBody;
     }
 
-    public void setProtocolBody(ProtocolBody protocolBody) {
-        this.protocolBody = protocolBody;
-        setBodyLength(HessianUtils.write(protocolBody).length);
+    public void setProtocolBody(MessageProtocolBody messageProtocolBody) {
+        this.messageProtocolBody = messageProtocolBody;
+        setBodyLength(HessianUtils.write(messageProtocolBody).length);
     }
 
     @Override
     public String toString() {
-        return "MessageProtocol{" + "headLength=" + headLength + ", protocolHead=" + protocolHead + ", bodyLength="
-               + bodyLength + ", protocolBody=" + protocolBody + '}';
+        return "MessageProtocol{" + "headLength=" + headLength + ", protocolHead=" + messageProtocolHead
+               + ", bodyLength="
+               + bodyLength + ", protocolBody=" + messageProtocolBody + '}';
     }
 }

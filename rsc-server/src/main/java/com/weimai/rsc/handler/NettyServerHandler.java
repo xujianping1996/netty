@@ -1,14 +1,13 @@
 package com.weimai.rsc.handler;
 
 import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
 
 import com.weimai.rsc.executor.pool.CommandLineExecPool;
 import com.weimai.rsc.executor.sql.SqlFunctionExecuter;
 import com.weimai.rsc.executor.sql.SqlQueryExecuter;
 import com.weimai.rsc.executor.sql.SqlUpdateExecuter;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.request.SQL;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -19,13 +18,15 @@ import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_UPDATE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
+ * <p>
+ * netty handler 接收协议包并解析分配给具体线程执行
  *
  * @author DiZhi
  * @since 2021-06-16 14:53
  */
 public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProtocol> {
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
         int port = socketAddress.getPort();
         String hostAddress = socketAddress.getAddress().getHostAddress();
@@ -33,8 +34,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProto
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol)
-            throws Exception {
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
         switch (messageProtocol.getProtocolHead().getDataType()) {
             case COMMAND_LINE_SQL_SELECT:
                 CommandLineExecPool.submit(new SqlQueryExecuter(

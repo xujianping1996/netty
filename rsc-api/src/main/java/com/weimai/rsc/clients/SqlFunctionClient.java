@@ -6,8 +6,8 @@ import java.sql.Types;
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.content.FunctionReult;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.response.RespFunction;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_FUNCTION;
@@ -20,7 +20,7 @@ import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_FUNCTION
  * @author DiZhi
  * @since 2021-08-10 16:25
  */
-public class SqlFunctionClient extends AbstractClient<FunctionReult> {
+public class SqlFunctionClient extends AbstractClient<RespFunction> {
 
     /**
      * 构造函数 设置当前链接的服务器ip和端口
@@ -98,12 +98,14 @@ public class SqlFunctionClient extends AbstractClient<FunctionReult> {
     }
 
     @Override
-    protected FunctionReult convertProtocol2JavaObj(MessageProtocol messageProtocol) {
-        ProtocolBody protocolBody = messageProtocol.getProtocolBody();
-        byte[] content = protocolBody.getContent();
-        return HessianUtils.read(content, FunctionReult.class);
+    protected RespFunction convertProtocol2JavaObj(MessageProtocol messageProtocol) {
+        MessageProtocolBody messageProtocolBody = messageProtocol.getProtocolBody();
+        byte[] content = messageProtocolBody.getContent();
+        return HessianUtils.read(content, RespFunction.class);
     }
-
+    public RespFunction execute() {
+        return super.execute();
+    }
     private static int getJdbcType(Object o) {
 
         if (o instanceof String) {

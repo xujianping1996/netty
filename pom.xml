@@ -21,6 +21,7 @@
         <netty-all.version>4.1.63.Final</netty-all.version>
         <hessian.version>4.0.63</hessian.version>
         <mysql-connector-java>8.0.17</mysql-connector-java>
+        <yaml.version>1.13</yaml.version>
     </properties>
 
     <dependencyManagement>
@@ -34,6 +35,11 @@
                 <groupId>com.caucho</groupId>
                 <artifactId>hessian</artifactId>
                 <version>${hessian.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${yaml.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.zaxxer</groupId>

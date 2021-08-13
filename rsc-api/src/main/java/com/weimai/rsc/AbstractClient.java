@@ -4,29 +4,28 @@ import java.util.UUID;
 
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.msg.content.SQL;
-import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
+import com.weimai.rsc.msg.request.SQL;
 import com.weimai.rsc.util.HessianUtils;
-import io.netty.channel.ChannelFuture;
 
-import static com.weimai.rsc.msg.content.SQL.*;
+import static com.weimai.rsc.msg.request.SQL.*;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * <p>
- * sql 执行客户端抽象类
+ * sql 执行客户端抽象模板类
  *
  * @author DiZhi
  * @since 2021-06-17 14:38
  */
 public abstract class AbstractClient<T> {
     protected final NettyClient nettyClient = NettyClient.getSingleInstance();
-    protected final MessageServiceImpl messageService = MessageServiceImpl.getSingleInstance();
-    protected ChannelFuture channelFuture = null;
+
     protected final MessageProtocol messageProtocol = new MessageProtocol();
 
+    private final String ip;
+    private final int port;
     protected String sql;
     protected byte sqlType;
 
@@ -37,12 +36,8 @@ public abstract class AbstractClient<T> {
     protected static final String PLACEHOLDER = "?";
 
     public AbstractClient(String ip, int port) {
-        try {
-            channelFuture = nettyClient.connect(ip, port);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        messageService.registerChannel(channelFuture);
+        this.ip = ip;
+        this.port = port;
     }
 
     protected void setSql(String sql, byte requestType) {
@@ -75,12 +70,9 @@ public abstract class AbstractClient<T> {
         param[paramIndex][PARAM_TYPE] = paramType;
     }
 
-    public T execute() {
-        if (this.channelFuture == null) {
-            throw new RuntimeException("未链接到远程服务器或已断开链接！");
-        }
+    protected T execute() {
         convertMsg2Protocol();
-        MessageProtocol messageProtocol = nettyClient.sendMessage(this.channelFuture, this.messageProtocol);
+        MessageProtocol messageProtocol = nettyClient.sendMessage(ip, port, this.messageProtocol);
         return convertProtocol2JavaObj(messageProtocol);
     }
 
@@ -98,14 +90,14 @@ public abstract class AbstractClient<T> {
         sql.setSqlLine(this.sql);
         sql.setParams(param);
         //封装协议头
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolHead.setRequestId(requestId);
-        protocolHead.setDataType(this.sqlType);
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+        messageProtocolHead.setRequestId(requestId);
+        messageProtocolHead.setDataType(this.sqlType);
         //封装协议体
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(HessianUtils.write(sql));
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(HessianUtils.write(sql));
         //封装协议包
-        messageProtocol.setProtocolBody(protocolBody);
-        messageProtocol.setProtocolHead(protocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
     }
 }

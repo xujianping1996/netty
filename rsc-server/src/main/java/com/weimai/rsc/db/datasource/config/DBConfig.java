@@ -1,10 +1,6 @@
 package com.weimai.rsc.db.datasource.config;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
-
+import com.weimai.rsc.Configurations;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -16,48 +12,27 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public class DBConfig {
 
-    private static final Properties properties ;
+    private static final Configurations CONFIGURATIONS;
     private static final HikariDataSource hikariDataSource ;
     private static final HikariConfig config ;
 
     static {
-        properties = new Properties();
-        FileInputStream inputStream = null;  //注意路径
-        try {
-            inputStream = new FileInputStream("D:\\idea_project\\rsc-parent\\rsc-server\\src\\main\\resources\\db.properties");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            properties.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        CONFIGURATIONS = Configurations.getInstance();
         config = new HikariConfig();
-        config.setDriverClassName(get("dataSource.driverClass"));
+
+        config.setDriverClassName(CONFIGURATIONS.getDataSources().get(0).getDriverClass());
         //config.setDataSourceClassName(get("dataSource.datasourceType"));
-        config.setJdbcUrl(get("dataSource.jdbcUrl"));
-        config.setUsername(get("dataSource.username"));
-        config.setPassword(get("dataSource.password"));
+        config.setJdbcUrl(CONFIGURATIONS.getDataSources().get(0).getJdbcUrl());
+        config.setUsername(CONFIGURATIONS.getDataSources().get(0).getUsername());
+        config.setPassword(CONFIGURATIONS.getDataSources().get(0).getPassword());
         hikariDataSource = new HikariDataSource(config);
 
     }
 
     private DBConfig(){}
 
-    private static String get(String propertiesName){
-        Object o = properties.get(propertiesName);
-        if (o==null){
-            throw new RuntimeException("属性"+propertiesName+"缺失");
-        }
-        return String.valueOf(o).trim();
-    }
-
     public static HikariDataSource hikariDataSource(){
         return hikariDataSource;
     }
 
-    public static void main(String[] args) {
-        System.out.println(get("dataSource.jdbcUrl"));
-    }
 }

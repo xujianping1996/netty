@@ -1,24 +1,21 @@
 package com.weimai.rsc.executor.sql;
 
 import java.sql.Connection;
-import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.sql.Statement;
-import java.sql.Types;
 
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
+import com.weimai.rsc.msg.request.SQL;
 import io.netty.channel.Channel;
 import io.netty.util.internal.StringUtil;
 
 import static com.weimai.rsc.constant.ProtocolDataType.INT;
-import static com.weimai.rsc.msg.content.SQL.INDEX;
-import static com.weimai.rsc.msg.content.SQL.VALUE;
+import static com.weimai.rsc.msg.request.SQL.INDEX;
+import static com.weimai.rsc.msg.request.SQL.VALUE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -67,15 +64,15 @@ public class SqlUpdateExecuter extends AbstractNettySqlExecuter<Integer> impleme
         targets[2] = (byte)(updateRows >> 8 & 0xFF);
         targets[1] = (byte)(updateRows >> 16 & 0xFF);
         targets[0] = (byte)(updateRows >> 24 & 0xFF);
-        ProtocolHead protocolHead = new ProtocolHead();
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
 
-        protocolHead.setRequestId(getRequestId());
-        protocolHead.setDataType(INT);
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(targets);
+        messageProtocolHead.setRequestId(getRequestId());
+        messageProtocolHead.setDataType(INT);
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(targets);
         MessageProtocol messageProtocol = new MessageProtocol();
-        messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setProtocolBody(protocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
 
         return messageProtocol;
     }

@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author DiZhi
  * @since 2021-07-02 14:52
  */
-public class ProtocolHead implements Serializable {
+public class MessageProtocolHead implements Serializable {
     private String requestId;
 
     private byte dataType;
@@ -23,10 +23,10 @@ public class ProtocolHead implements Serializable {
         this.dataType = dataType;
     }
 
-    public ProtocolHead() {
+    public MessageProtocolHead() {
     }
 
-    public ProtocolHead(String requestId) {
+    public MessageProtocolHead(String requestId) {
         this.requestId = requestId;
     }
 

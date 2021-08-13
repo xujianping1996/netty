@@ -1,13 +1,15 @@
 package com.weimai.rsc;
 
-import java.nio.charset.StandardCharsets;
 
-import com.weimai.rsc.constant.Suffix;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Map;
+
+import com.weimai.rsc.Configurations.Server;
 import com.weimai.rsc.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
+
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -16,12 +18,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.base64.Base64Decoder;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.codec.http.HttpRequestDecoder;
-import io.netty.handler.codec.http.HttpResponseEncoder;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -32,10 +29,9 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
  * @since 2021-06-16 14:49
  */
 public class Bootstrap {
-    public static String IP = "127.0.0.1";
-    public static int PORT = 8088;
-    private static final String DEFAULT_URL = "/httpProject";
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        Server server = Configurations.getInstance().getServer();
+
         //配置两个服务端的NIO线程组，一个用于接收客服端的链接，另一个用于进行SocketChannel的网络读写。
         //NioEventLoopGroup是一个处理I/O操作的多线程事件循环
         //"boss"：接收一个传入连接
@@ -57,7 +53,7 @@ public class Bootstrap {
 
             // Bind and start to accept incoming connections.
             //异步地绑定服务器；调用 sync()方法阻塞等待直到绑定完成
-            ChannelFuture f = bootstrap.bind(PORT).sync();
+            ChannelFuture f = bootstrap.bind(server.getPort()).sync();
             // Wait until the server socket is closed.
             // In this example, this does not happen, but you can do that to gracefully
             // shut down your server.
@@ -69,6 +65,10 @@ public class Bootstrap {
             worker.shutdownGracefully();
         }
 
+    }
+
+    private static void loadConfigurations() {
+        Configurations instance = Configurations.getInstance();
     }
 
     static class MyChannelInitializer extends ChannelInitializer<SocketChannel> {

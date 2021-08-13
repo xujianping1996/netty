@@ -1,9 +1,12 @@
 package com.weimai.rsc.clients;
 
+import java.util.List;
+import java.util.Map;
+
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolBody;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_UPDATE;
 
@@ -30,12 +33,14 @@ public class SqlUpdateClient extends AbstractClient<Integer> {
         super.setParam(obj, SqlParamType.IN, null);
         return this;
     }
-
+    public Integer execute() {
+        return super.execute();
+    }
     @Override
     protected Integer convertProtocol2JavaObj(MessageProtocol messageProtocol) {
-        ProtocolBody protocolBody = messageProtocol.getProtocolBody();
+        MessageProtocolBody messageProtocolBody = messageProtocol.getProtocolBody();
 
-        byte[] content = protocolBody.getContent();
+        byte[] content = messageProtocolBody.getContent();
         int b0 = content[0] & 0xFF;
         int b1 = content[1] & 0xFF;
         int b2 = content[2] & 0xFF;

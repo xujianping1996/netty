@@ -23,36 +23,24 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
     }
 
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        InetSocketAddress localSocketAddress = (InetSocketAddress)ctx.channel().localAddress();
+        int localPort = localSocketAddress.getPort();
+        String localAddress = localSocketAddress.getAddress().getHostAddress();
         InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
-
         int port = socketAddress.getPort();
         String hostAddress = socketAddress.getAddress().getHostAddress();
-        System.out.println("已链接至"+hostAddress+":"+port);
+        System.out.println("客户端["+localAddress+":"+localPort+"]->服务器["+hostAddress+":"+port+"]");
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
-        //System.out.println(ip+":"+port+"已断开链接");
+
+        System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort()+"已断开链接");
         ctx.close();
     }
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
-
-
-        //switch (messageProtocol.getProtocolHead().getDataType()){
-        //    case INT:
-        //        break;
-        //    case TABLE:
-        //        System.out.println(HessianUtils.read(messageProtocol.getProtocolBody().getContent(),
-        //                                             DBTable.class));
-        //        break;
-        //    case ERROR:
-        //        break;
-        //
-        //}
-
-
         messageService.cacheMessage(messageProtocol);
     }
 

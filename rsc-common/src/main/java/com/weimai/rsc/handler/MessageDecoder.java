@@ -3,13 +3,12 @@ package com.weimai.rsc.handler;
 import java.util.List;
 
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.http.HttpRequestDecoder;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -22,8 +21,6 @@ public class MessageDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list)
             throws Exception {
-        //HttpRequestDecoder
-        System.out.println(byteBuf);
         try {
             if (byteBuf.readableBytes()<12){
                 //协议开始标识长度+请求头长度+请求体长度
@@ -61,19 +58,19 @@ public class MessageDecoder extends ByteToMessageDecoder {
             // 读取协议包头数据
             byte[] head = new byte[headLength];
             byteBuf.readBytes(head);
-            ProtocolHead protocolHead = HessianUtils.read(head,ProtocolHead.class);
+            MessageProtocolHead messageProtocolHead = HessianUtils.read(head, MessageProtocolHead.class);
 
             // 读取协议包体数据
             byte[] body = new byte[bodyLength];
             byteBuf.readBytes(body);
-            ProtocolBody protocolBody = HessianUtils.read(body, ProtocolBody.class);
+            MessageProtocolBody messageProtocolBody = HessianUtils.read(body, MessageProtocolBody.class);
 
             // 封装协议
             MessageProtocol messageProtocol = new MessageProtocol();
             //messageProtocol.setHeadLength(headLength);
             //messageProtocol.setBodyLength(bodyLength);
-            messageProtocol.setProtocolHead(protocolHead);
-            messageProtocol.setProtocolBody(protocolBody);
+            messageProtocol.setProtocolHead(messageProtocolHead);
+            messageProtocol.setProtocolBody(messageProtocolBody);
 
             list.add(messageProtocol);
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package com.weimai.rsc.msg.content;
+package com.weimai.rsc.msg.response;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author DiZhi
  * @since 2021-07-29 19:57
  */
-public class FunctionReult implements Serializable {
+public class RespFunction implements Serializable {
 
     /**
      * OUT 类型参数结果集 一维是个数 [0] 参数在方法中的参数下标 [1] 结果值
@@ -20,7 +20,7 @@ public class FunctionReult implements Serializable {
     /**
      * 存储过程或方法返回的结果集
      */
-    DBTable dbTable;
+    RespDbTable respDbTable;
 
     public Object[][] getOutParams() {
         return outParams;
@@ -30,11 +30,11 @@ public class FunctionReult implements Serializable {
         this.outParams = outParams;
     }
 
-    public DBTable getDbTable() {
-        return dbTable;
+    public RespDbTable getDbTable() {
+        return respDbTable;
     }
 
-    public void setDbTable(DBTable dbTable) {
-        this.dbTable = dbTable;
+    public void setDbTable(RespDbTable respDbTable) {
+        this.respDbTable = respDbTable;
     }
 }

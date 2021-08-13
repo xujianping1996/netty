@@ -1,6 +1,5 @@
 package com.weimai.rsc.msg.impl;
 
-import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
@@ -8,13 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.weimai.rsc.Client;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageService;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.util.HessianUtils;
-import io.netty.channel.ChannelFuture;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -24,7 +20,6 @@ import io.netty.channel.ChannelFuture;
  */
 public class MessageServiceImpl implements MessageService {
     private static final MessageServiceImpl messageService = new MessageServiceImpl();
-    private Map<String, ChannelFuture> channelFutures ;
 
     private Map<String ,MessageProtocol> messageProtocols ;
 
@@ -36,7 +31,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private MessageServiceImpl(){
-        channelFutures = new ConcurrentHashMap<>();
         messageProtocols = new ConcurrentHashMap<>();
         locks = new ConcurrentHashMap<>();
     }
@@ -60,33 +54,6 @@ public class MessageServiceImpl implements MessageService {
     }
     public MessageProtocol loadMessage(String requestId){
         return messageProtocols.remove(requestId);
-    }
-    public ChannelFuture getChannel(String ip,int port){
-        return channelFutures.get(getkey(ip,port));
-    }
-
-    public void registerChannel(ChannelFuture channelFuture){
-        InetSocketAddress socketAddress = (InetSocketAddress)channelFuture.channel().remoteAddress();
-        String key = getkey(socketAddress);
-        channelFutures.put(key,channelFuture);
-    }
-
-    public void removeChannel(ChannelFuture channelFuture){
-        InetSocketAddress socketAddress = (InetSocketAddress)channelFuture.channel().remoteAddress();
-        String key = getkey(socketAddress);
-        channelFutures.remove(key);
-    }
-    public void removeChannel(String ip,int port){
-        String key = getkey(ip,port);
-        channelFutures.remove(key);
-    }
-
-
-    private String getkey(InetSocketAddress socketAddress) {
-        return socketAddress.getAddress().getHostAddress()+":"+ socketAddress.getPort();
-    }
-    private String getkey(String ip,int port) {
-        return ip+":"+ port;
     }
 
     @Override
@@ -114,14 +81,14 @@ public class MessageServiceImpl implements MessageService {
         String requestId = UUID.randomUUID().toString().replace("-", "");
         byte[] sqlBytes = message.getBytes(StandardCharsets.UTF_8);
         //封装协议头
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolHead.setRequestId(requestId);
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+        messageProtocolHead.setRequestId(requestId);
         //封装协议体
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(sqlBytes);
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(sqlBytes);
         //封装协议包
-        messageProtocol.setProtocolBody(protocolBody);
-        messageProtocol.setProtocolHead(protocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
         //messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
         //messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
         //channel.writeAndFlush(messageProtocol);

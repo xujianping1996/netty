@@ -9,9 +9,9 @@ import com.weimai.rsc.executor.Executer;
 
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
+import com.weimai.rsc.msg.request.SQL;
 import com.weimai.rsc.util.HessianUtils;
 import com.zaxxer.hikari.HikariDataSource;
 import io.netty.channel.Channel;
@@ -70,14 +70,14 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
     protected abstract Message result2Message(T t);
 
     private Message formatErrorMessage(Exception e){
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolHead.setRequestId(this.requestId);
-        protocolHead.setDataType(ERROR);
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(HessianUtils.write(e.getStackTrace()));
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+        messageProtocolHead.setRequestId(this.requestId);
+        messageProtocolHead.setDataType(ERROR);
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(HessianUtils.write(e.getStackTrace()));
         MessageProtocol messageProtocol = new MessageProtocol();
-        messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setProtocolBody(protocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
         return messageProtocol;
     };
     protected Connection getConnection() throws SQLException {

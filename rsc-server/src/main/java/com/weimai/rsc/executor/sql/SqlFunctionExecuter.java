@@ -9,23 +9,23 @@ import java.util.ArrayList;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.msg.Message;
 import com.weimai.rsc.msg.MessageProtocol;
-import com.weimai.rsc.msg.ProtocolBody;
-import com.weimai.rsc.msg.ProtocolHead;
-import com.weimai.rsc.msg.content.DBTable;
-import com.weimai.rsc.msg.content.FunctionReult;
-import com.weimai.rsc.msg.content.SQL;
+import com.weimai.rsc.msg.MessageProtocolBody;
+import com.weimai.rsc.msg.MessageProtocolHead;
+import com.weimai.rsc.msg.response.RespDbTable;
+import com.weimai.rsc.msg.response.RespFunction;
+import com.weimai.rsc.msg.request.SQL;
 import com.weimai.rsc.util.Collections;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.Channel;
 import io.netty.util.internal.StringUtil;
 
 import static com.weimai.rsc.constant.ProtocolDataType.FUNCTION_DATA;
-import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_NAME;
-import static com.weimai.rsc.constant.TableColumnConstant.COLUMN_TYPE;
-import static com.weimai.rsc.msg.content.SQL.INDEX;
-import static com.weimai.rsc.msg.content.SQL.PARAM_TYPE;
-import static com.weimai.rsc.msg.content.SQL.SQL_PARAM_TYPE;
-import static com.weimai.rsc.msg.content.SQL.VALUE;
+import static com.weimai.rsc.msg.request.SQL.INDEX;
+import static com.weimai.rsc.msg.request.SQL.PARAM_TYPE;
+import static com.weimai.rsc.msg.request.SQL.SQL_PARAM_TYPE;
+import static com.weimai.rsc.msg.request.SQL.VALUE;
+import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_NAME;
+import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_TYPE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential. 存储过程或方法sql执行者
@@ -117,26 +117,26 @@ public class SqlFunctionExecuter extends AbstractNettySqlExecuter<Object[]> impl
 
     @Override
     protected Message result2Message(Object[] stringMap) {
-        FunctionReult functionReult = new FunctionReult();
+        RespFunction respFunction = new RespFunction();
         Object tableData = stringMap[0];
         Object outParamData = stringMap[1];
         if (outParamData != null) {
-            functionReult.setOutParams((Object[][])outParamData);
+            respFunction.setOutParams((Object[][])outParamData);
         }
         if (tableData != null) {
-            DBTable dbTable = new DBTable();
-            dbTable.setHeader(((Object[][][])tableData)[0]);
-            dbTable.setData(((Object[][][])tableData)[1]);
-            functionReult.setDbTable(dbTable);
+            RespDbTable respDbTable = new RespDbTable();
+            respDbTable.setHeader(((Object[][][])tableData)[0]);
+            respDbTable.setData(((Object[][][])tableData)[1]);
+            respFunction.setDbTable(respDbTable);
         }
-        ProtocolHead protocolHead = new ProtocolHead();
-        protocolHead.setRequestId(getRequestId());
-        protocolHead.setDataType(FUNCTION_DATA);
-        ProtocolBody protocolBody = new ProtocolBody();
-        protocolBody.setContent(HessianUtils.write(functionReult));
+        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+        messageProtocolHead.setRequestId(getRequestId());
+        messageProtocolHead.setDataType(FUNCTION_DATA);
+        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+        messageProtocolBody.setContent(HessianUtils.write(respFunction));
         MessageProtocol messageProtocol = new MessageProtocol();
-        messageProtocol.setProtocolHead(protocolHead);
-        messageProtocol.setProtocolBody(protocolBody);
+        messageProtocol.setProtocolHead(messageProtocolHead);
+        messageProtocol.setProtocolBody(messageProtocolBody);
         return messageProtocol;
     }
 
