@@ -10,9 +10,11 @@ package com.weimai.rsc.pool;
  */
 public enum ConnectPoolConfigurations {
 
-
-    CORE_LINK_SIZE("rsc.client.channel.pool.size",5),
+    MAX_LINK_SIZE("rsc.client.channel.pool.max.link.size",10),
+    CORE_LINK_SIZE("rsc.client.channel.pool.core.link.size",5),
+    WAIT_QUEUE_SIZE("rsc.client.channel.pool.wait.queue.size",2),
     CORE_LINK_LIVE_TIME("rsc.client.channel.survive.size",5);
+
     private String configName;
     private int value;
     ConnectPoolConfigurations(String name, int value){

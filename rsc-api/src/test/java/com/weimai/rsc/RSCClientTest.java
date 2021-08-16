@@ -1,5 +1,6 @@
 package com.weimai.rsc;
 
+import java.time.Month;
 import java.util.List;
 import java.util.Map;
 
@@ -16,17 +17,31 @@ public class RSCClientTest {
     public static String IP = "127.0.0.1";
     public static int PORT = 8088;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //String sql = "SELECT * FROM request_log WHERE institution_id = 100214 AND method_name = 'open_third_user'";
-        while (true){
-            String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-            //String sql = "SELECT * FROM request_log WHERE institution_id = ?";
-            String method_name = "open_third_user";
-            Long institution_id = 100214L;
-            List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
-            //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
-            System.out.println(execute.size());
+        for (int i = 0;i<100;i++){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true){
+                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+                        //String sql = "SELECT * FROM request_log WHERE institution_id = ?";
+                        String method_name = "open_third_user";
+                        Long institution_id = 100214L;
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
+                        //System.out.println(execute.size());
+                        try {
+                            Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            },"用户线程:"+i).start();
         }
+
+
 
     }
 

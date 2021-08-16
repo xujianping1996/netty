@@ -16,19 +16,13 @@ import io.netty.channel.ChannelFuture;
  * @author DiZhi
  * @since 2021-07-02 16:20
  */
-public class ConnectedPool {
+public class ChannelPoolGroup {
 
-    private static final ConnectedPool CONNECTED_POOL = new ConnectedPool();
+    private static final ChannelPoolGroup CONNECTED_POOL = new ChannelPoolGroup();
 
     private Map<String ,ChannelPool> channelPools = new ConcurrentHashMap<>();
 
-
-    /**
-     * 请求等待队列
-     */
-    private ConcurrentLinkedQueue<MessageProtocol> requestMessageWaitQueue = new ConcurrentLinkedQueue<>();
-
-    private ConnectedPool (){
+    private ChannelPoolGroup(){
 
     }
 
@@ -36,10 +30,10 @@ public class ConnectedPool {
      * 获取当前 jvm 中的连接池
      * @return
      */
-    public static ConnectedPool pool(){
+    public static ChannelPoolGroup pool(){
         return CONNECTED_POOL;
     }
-    public ChannelFuture getChannel(String ip,int port){
+    public synchronized ChannelFuture getChannel(String ip,int port) throws InterruptedException {
         ChannelPool channelPool = channelPools.get(poolKey(ip, port));
         if (channelPool==null){
             channelPool = new ChannelPool(ip,port);
