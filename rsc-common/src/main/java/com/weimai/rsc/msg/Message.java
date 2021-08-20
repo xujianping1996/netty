@@ -9,4 +9,5 @@ package com.weimai.rsc.msg;
  * @since 2021-07-16 16:20
  */
 public interface Message {
+
 }

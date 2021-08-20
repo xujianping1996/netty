@@ -21,9 +21,9 @@ import com.weimai.rsc.msg.MessageProtocolHead;
 public class MessageServiceImpl implements MessageService {
     private static final MessageServiceImpl messageService = new MessageServiceImpl();
 
-    private Map<String ,MessageProtocol> messageProtocols ;
+    private final Map<String ,MessageProtocol> messageProtocols ;
 
-    private Map<String ,CountDownLatch> locks ;
+    private final Map<String ,CountDownLatch> locks ;
 
 
     public static MessageServiceImpl getSingleInstance(){

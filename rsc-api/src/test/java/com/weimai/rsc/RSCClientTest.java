@@ -19,27 +19,35 @@ public class RSCClientTest {
 
     public static void main(String[] args) throws InterruptedException {
         //String sql = "SELECT * FROM request_log WHERE institution_id = 100214 AND method_name = 'open_third_user'";
-        for (int i = 0;i<100;i++){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true){
-                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-                        //String sql = "SELECT * FROM request_log WHERE institution_id = ?";
-                        String method_name = "open_third_user";
-                        Long institution_id = 100214L;
-                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+        //for (int i = 0;i<10;i++){
+        //    new Thread(new Runnable() {
+        //        @Override
+        //        public void run() {
+                    //for (int i = 0;i<100;i++) {
+                        //String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+
+                        String sql = "SELECT * FROM request_log";
+                        //String method_name = "open_third_user";
+                        //Long institution_id = 100214L;
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).execute();
                         //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
                         //System.out.println(execute.size());
-                        try {
-                            Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            },"用户线程:"+i).start();
-        }
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+
+        System.out.println("111");
+                    //}
+                //}
+        //    },"用户线程:"+i).start();
+        //}
 
 
 

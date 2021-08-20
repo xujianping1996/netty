@@ -7,6 +7,8 @@ import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.MessageProtocolHead;
 import com.weimai.rsc.msg.request.SQL;
+import com.weimai.rsc.pool.ChannelGroup;
+import com.weimai.rsc.pool.ChannelWrapper;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.msg.request.SQL.*;
@@ -20,12 +22,12 @@ import static com.weimai.rsc.msg.request.SQL.*;
  * @since 2021-06-17 14:38
  */
 public abstract class AbstractClient<T> {
-    protected final NettyClient nettyClient = NettyClient.getSingleInstance();
-
+    //protected final NettyClient nettyClient = NettyClient.getSingleInstance();
+    protected final ChannelWrapper channelWrapper ;
     protected final MessageProtocol messageProtocol = new MessageProtocol();
 
-    private final String ip;
-    private final int port;
+    //private final String ip;
+    //private final int port;
     protected String sql;
     protected byte sqlType;
 
@@ -36,8 +38,9 @@ public abstract class AbstractClient<T> {
     protected static final String PLACEHOLDER = "?";
 
     public AbstractClient(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
+        //this.ip = ip;
+        //this.port = port;
+        channelWrapper = ChannelGroup.getSingleInstance().getChannel(ip,port);
     }
 
     protected void setSql(String sql, byte requestType) {
@@ -72,7 +75,7 @@ public abstract class AbstractClient<T> {
 
     protected T execute() {
         convertMsg2Protocol();
-        MessageProtocol messageProtocol = nettyClient.sendMessage(ip, port, this.messageProtocol);
+        MessageProtocol messageProtocol = channelWrapper.sendMessage(this.messageProtocol);
         return convertProtocol2JavaObj(messageProtocol);
     }
 
@@ -86,6 +89,7 @@ public abstract class AbstractClient<T> {
 
     private void convertMsg2Protocol() {
         String requestId = UUID.randomUUID().toString().replace("-", "");
+        System.out.println(requestId);
         SQL sql = new SQL();
         sql.setSqlLine(this.sql);
         sql.setParams(param);

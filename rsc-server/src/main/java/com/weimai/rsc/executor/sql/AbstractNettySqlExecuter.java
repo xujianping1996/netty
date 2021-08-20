@@ -95,5 +95,6 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
             message = formatErrorMessage(e);
         }
         this.sendMessageToClient(message);
+
     }
 }
