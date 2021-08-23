@@ -1,5 +1,7 @@
 package com.weimai.rsc;
 
+import java.util.concurrent.TimeUnit;
+
 import com.weimai.rsc.handler.MessageDecoder;
 import com.weimai.rsc.handler.MessageEncoder;
 import com.weimai.rsc.handler.NettyClientHandler;
@@ -12,7 +14,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -43,6 +45,7 @@ public class NettyClient {
             ChannelPipeline pipeline = socketChannel.pipeline();
             pipeline.addLast(new MessageDecoder());
             pipeline.addLast(new MessageEncoder());
+            pipeline.addLast(new IdleStateHandler(20, 20, 20, TimeUnit.SECONDS));
             pipeline.addLast(new NettyClientHandler());
         }
     }
@@ -51,7 +54,4 @@ public class NettyClient {
         return bootstrap.connect(ip,port).sync();
     }
 
-    private String channelKey(String ip,int port){
-        return ip+":"+port;
-    }
 }

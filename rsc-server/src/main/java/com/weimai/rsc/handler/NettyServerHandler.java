@@ -1,6 +1,7 @@
 package com.weimai.rsc.handler;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import com.weimai.rsc.executor.pool.CommandLineExecPool;
 import com.weimai.rsc.executor.sql.SqlFunctionExecuter;
@@ -59,5 +60,15 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessageProto
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    }
+
+    @Override
+
+    public void handlerRemoved(ChannelHandlerContext ctx){
+        //这里执行客户端断开连接后的操作
+        InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
+        String hostAddress = socketAddress.getAddress().getHostAddress();
+        int port = socketAddress.getPort();
+        System.out.println("客户端："+hostAddress + ":" + port+"已断开连接");
     }
 }

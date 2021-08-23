@@ -9,6 +9,7 @@ import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 
 import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
 
@@ -20,7 +21,6 @@ import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
  */
 public class ChannelWrapper {
     private Channel channel;
-    private Long timestamp ;
     private final String ip;
     private final int port;
     private final MessageServiceImpl messageService;
@@ -29,7 +29,6 @@ public class ChannelWrapper {
     public ChannelWrapper(String ip,Integer port ){
         this.ip = ip;
         this.port = port;
-        timestamp = System.currentTimeMillis();
         try {
             this.channel = nettyClient.doConnect(ip,port).channel();
         } catch (InterruptedException e) {
@@ -61,5 +60,10 @@ public class ChannelWrapper {
         return response;
     }
 
+
+    void destroy(){
+        this.channel.close();
+        System.out.println("客户端已经关闭连接！");
+    }
 
 }

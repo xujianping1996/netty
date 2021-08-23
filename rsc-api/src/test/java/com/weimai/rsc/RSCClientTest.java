@@ -14,27 +14,27 @@ import com.weimai.rsc.clients.SqlQueryClient;
  */
 public class RSCClientTest {
     //private static Logger LOGGER = LoggerFactory.getLogger(NettyClient.class);
-    public static String IP = "127.0.0.1";
-    public static int PORT = 8088;
+
 
     public static void main(String[] args) throws InterruptedException {
         //String sql = "SELECT * FROM request_log WHERE institution_id = 100214 AND method_name = 'open_third_user'";
-        //for (int i = 0;i<10;i++){
-        //    new Thread(new Runnable() {
-        //        @Override
-        //        public void run() {
-                    //for (int i = 0;i<100;i++) {
-                        //String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-
-                        String sql = "SELECT * FROM request_log";
-                        //String method_name = "open_third_user";
-                        //Long institution_id = 100214L;
+        for (int i = 0;i<10;i++){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0;i<10;i++) {
+                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+                         String IP = "127.0.0.1";
+                         int PORT = 8088;
+                        //String sql = "SELECT * FROM request_log";
+                        String method_name = "open_third_user";
+                        Long institution_id = 100214L;
                         //try {
                         //    Thread.sleep(Math.round((Math.random()+1) * 1000));
                         //} catch (InterruptedException e) {
                         //    e.printStackTrace();
                         //}
-                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).execute();
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
                         //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
                         //System.out.println(execute.size());
                         //try {
@@ -43,11 +43,76 @@ public class RSCClientTest {
                         //    e.printStackTrace();
                         //}
 
-        System.out.println("111");
-                    //}
-                //}
-        //    },"用户线程:"+i).start();
-        //}
+                    }
+                    for (int i = 0;i<10;i++) {
+                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+                        String IP = "127.0.0.1";
+                        int PORT = 8089;
+                        //String sql = "SELECT * FROM request_log";
+                        String method_name = "open_third_user";
+                        Long institution_id = 100214L;
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
+                        //System.out.println(execute.size());
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+
+                    }
+                    for (int i = 0;i<10;i++) {
+                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+                        String IP = "127.0.0.1";
+                        int PORT = 8090;
+                        //String sql = "SELECT * FROM request_log";
+                        String method_name = "open_third_user";
+                        Long institution_id = 100214L;
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
+                        //System.out.println(execute.size());
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+
+                    }
+                    for (int i = 0;i<10;i++) {
+                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
+                        String IP = "127.0.0.1";
+                        int PORT = 8091;
+                        //String sql = "SELECT * FROM request_log";
+                        String method_name = "open_third_user";
+                        Long institution_id = 100214L;
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
+                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
+                        //System.out.println(execute.size());
+                        //try {
+                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();
+                        //}
+
+                    }
+                }
+            },"用户线程:"+i).start();
+        }
 
 
 

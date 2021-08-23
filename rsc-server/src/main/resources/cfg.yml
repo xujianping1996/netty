@@ -1,5 +1,5 @@
 server:
- port: 8088
+ port: 8091
 
 data-source:
   - driver-class: com.mysql.cj.jdbc.Driver

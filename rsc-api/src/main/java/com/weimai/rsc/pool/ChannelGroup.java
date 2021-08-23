@@ -22,6 +22,7 @@ public class ChannelGroup {
     public static ChannelGroup getSingleInstance(){
         return CHANNEL_GROUP;
     }
+
     public ChannelWrapper getChannel(String ip,int port){
         String key = channelKey(ip, port);
         ChannelWrapper existedWrapper = channels.get(key);
@@ -34,6 +35,15 @@ public class ChannelGroup {
         }
         return channels.get(key);
 
+    }
+
+    public void destroyChannel(String ip,int port){
+        String key = channelKey(ip, port);
+        ChannelWrapper existedWrapper = channels.get(key);
+        existedWrapper.destroy();
+        channels.remove(key);
+        System.out.println("当前连接数总数"+channels.size());
+        System.out.println("channels:"+channels);
     }
 
     private String channelKey(String ip,int port){

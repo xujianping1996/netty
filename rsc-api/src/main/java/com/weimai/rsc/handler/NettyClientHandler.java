@@ -1,11 +1,15 @@
 package com.weimai.rsc.handler;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
+import com.weimai.rsc.pool.ChannelGroup;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleStateEvent;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -17,9 +21,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
  */
 public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProtocol> {
     private final MessageServiceImpl messageService;
-
+    private final ChannelGroup channelGroup;
     public NettyClientHandler() {
         messageService = MessageServiceImpl.getSingleInstance();
+        channelGroup = ChannelGroup.getSingleInstance();
     }
 
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -44,4 +49,32 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
         messageService.cacheMessage(messageProtocol);
     }
 
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        Channel channel = ctx.channel();
+        InetSocketAddress remoteAddress = (InetSocketAddress)channel.remoteAddress();
+        String ip = remoteAddress.getAddress().getHostAddress();
+        int port = remoteAddress.getPort();
+
+
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent idleStateEvent = (IdleStateEvent)evt;
+            String eventType = null;
+            switch (idleStateEvent.state()) {
+                case READER_IDLE:
+                    eventType = "读空闲";
+                    break;
+                case WRITER_IDLE:
+                    eventType = "写空闲";
+                    break;
+                case ALL_IDLE:
+                    eventType = "读写空闲";
+                    break;
+            }
+
+            System.out.println(ctx.channel().remoteAddress() + "超时事件:" + eventType);
+            channelGroup.destroyChannel(ip,port);
+            ctx.channel().close();
+        }
+    }
 }
