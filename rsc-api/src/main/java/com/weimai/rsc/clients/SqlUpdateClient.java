@@ -5,9 +5,11 @@ import java.util.Map;
 
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
+import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 
+import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_UPDATE;
 
 /**
@@ -25,7 +27,12 @@ public class SqlUpdateClient extends AbstractClient<Integer> {
     }
 
     public SqlUpdateClient sql(String sql) {
-        super.setSql(sql, COMMAND_LINE_SQL_UPDATE);
+        return sql(DataSourceIndex.DEFAULT_DATA_SOURCE_INDEX,sql);
+    }
+
+    public SqlUpdateClient sql(DataSourceIndex dataSource, String sql) {
+        super.setDataSource(dataSource);
+        super.setSql(sql, COMMAND_LINE_SQL_SELECT);
         return this;
     }
 

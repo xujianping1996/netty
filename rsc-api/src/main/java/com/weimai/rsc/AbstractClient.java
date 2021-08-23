@@ -3,6 +3,7 @@ package com.weimai.rsc;
 import java.util.UUID;
 
 import com.weimai.rsc.common.SqlParamType;
+import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.MessageProtocolHead;
@@ -22,14 +23,13 @@ import static com.weimai.rsc.msg.request.SQL.*;
  * @since 2021-06-17 14:38
  */
 public abstract class AbstractClient<T> {
-    //protected final NettyClient nettyClient = NettyClient.getSingleInstance();
+
     protected final ChannelWrapper channelWrapper ;
     protected final MessageProtocol messageProtocol = new MessageProtocol();
 
-    //private final String ip;
-    //private final int port;
     protected String sql;
     protected byte sqlType;
+    protected DataSourceIndex dataSource;
 
     protected Object[][] param;
     protected int paramsLength = 0;
@@ -38,11 +38,11 @@ public abstract class AbstractClient<T> {
     protected static final String PLACEHOLDER = "?";
 
     public AbstractClient(String ip, int port) {
-        //this.ip = ip;
-        //this.port = port;
         channelWrapper = ChannelGroup.getSingleInstance().getChannel(ip,port);
     }
-
+    protected void setDataSource(DataSourceIndex dataSourceIndex){
+        this.dataSource = dataSourceIndex;
+    }
     protected void setSql(String sql, byte requestType) {
         this.sql = sql;
         this.sqlType = requestType;
@@ -91,8 +91,11 @@ public abstract class AbstractClient<T> {
         String requestId = UUID.randomUUID().toString().replace("-", "");
         System.out.println(requestId);
         SQL sql = new SQL();
+
+        sql.setDataSource(dataSource.getIndex());
         sql.setSqlLine(this.sql);
         sql.setParams(param);
+
         //封装协议头
         MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
         messageProtocolHead.setRequestId(requestId);

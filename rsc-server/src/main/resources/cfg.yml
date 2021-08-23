@@ -1,6 +1,7 @@
 server:
  port: 8091
 
+#按照配置顺序，依次为：默认数据源、第二数据源、第三数据源……第七数据源，当前版本数据源最大个数为 7 个，多余的数据源配置将被忽略
 data-source:
   - driver-class: com.mysql.cj.jdbc.Driver
     datasource-type: com.zaxxer.hikari.HikariDataSource

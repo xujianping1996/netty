@@ -3,7 +3,7 @@ package com.weimai.rsc.executor.sql;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.weimai.rsc.db.datasource.config.DBConfig;
+import com.weimai.rsc.db.datasource.config.DBConnPoolFactory;
 import com.weimai.rsc.db.repository.SransferStation;
 import com.weimai.rsc.executor.Executer;
 
@@ -52,7 +52,7 @@ public abstract  class  AbstractNettySqlExecuter<T> implements Executer<T>, Sran
 
     protected AbstractNettySqlExecuter(SQL sql, Channel channel, String requestId) {
         this.sql = sql;
-        this.hikariDataSource = DBConfig.hikariDataSource();
+        this.hikariDataSource = DBConnPoolFactory.dataSource(sql.getDataSource());
         this.channel = channel;
         this.requestId = requestId;
     }

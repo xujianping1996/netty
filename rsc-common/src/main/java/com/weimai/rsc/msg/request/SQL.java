@@ -19,6 +19,11 @@ public class SQL implements Command, Serializable {
     public static final int PARAM_TYPE = 3;
 
     /**
+     * 具体数据源，默认 default
+     */
+    private Integer dataSource;
+
+    /**
      * 待执行sql命令行 允许是带有占位符的sql命令行
      */
     private String sqlLine;
@@ -50,5 +55,13 @@ public class SQL implements Command, Serializable {
 
     public void setParams(Object[][] params) {
         this.params = params;
+    }
+
+    public Integer getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(Integer dataSource) {
+        this.dataSource = dataSource;
     }
 }

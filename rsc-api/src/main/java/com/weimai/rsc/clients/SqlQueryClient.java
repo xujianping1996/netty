@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
+import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.response.RespDbTable;
@@ -14,6 +15,7 @@ import com.weimai.rsc.msg.response.RespFunction;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
+import static com.weimai.rsc.msg.request.SQL.*;
 import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_NAME;
 
 /**
@@ -37,19 +39,31 @@ public class SqlQueryClient extends AbstractClient<List<Map<String, String>>> {
     }
 
     /**
-     * 设置待执行 sql 语句
+     * 重写 sql(int dataSourceIndex, String sql) 方法，使用默认数据源，适用于服务端只有一个数据源的情况
      *
      * @param sql sql 语句
      * @return 当前对象 实现链式编程
      */
     public SqlQueryClient sql(String sql) {
+        return sql(DataSourceIndex.DEFAULT_DATA_SOURCE_INDEX, sql);
+    }
+
+    /**
+     * 设置待执行 sql 语句，以及执行 sql 的数据源
+     *
+     * @param dataSource 数据源序号
+     * @param sql 待执行 sql 语句
+     * @return 当前对象 实现链式编程
+     */
+    public SqlQueryClient sql(DataSourceIndex dataSource, String sql) {
+        super.setDataSource(dataSource);
         super.setSql(sql, COMMAND_LINE_SQL_SELECT);
         return this;
     }
 
     /**
-     * 设置预编译 sql 参数
-     * 如果 sql 不是预编译sql，则不应该调用该接口
+     * 设置预编译 sql 参数 如果 sql 不是预编译sql，则不应该调用该接口
+     *
      * @param obj 传入的参数引用
      * @return 返回当前对象 实现链式编程
      */
@@ -57,9 +71,11 @@ public class SqlQueryClient extends AbstractClient<List<Map<String, String>>> {
         super.setParam(obj, SqlParamType.IN, null);
         return this;
     }
+
     public List<Map<String, String>> execute() {
         return super.execute();
     }
+
     @Override
     protected List<Map<String, String>> convertProtocol2JavaObj(MessageProtocol messageProtocol) {
         MessageProtocolBody messageProtocolBody = messageProtocol.getProtocolBody();

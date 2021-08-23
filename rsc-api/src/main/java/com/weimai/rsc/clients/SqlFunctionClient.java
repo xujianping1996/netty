@@ -5,12 +5,14 @@ import java.sql.Types;
 
 import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
+import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.response.RespFunction;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_FUNCTION;
+import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
@@ -33,16 +35,25 @@ public class SqlFunctionClient extends AbstractClient<RespFunction> {
     }
 
     /**
-     * 设置待执行 sql 语句
+     * 设置待执行 sql 语句 ,重写 sql(DataSourceIndex dataSource, String sql) 方法，使用默认数据源
      *
      * @param sql sql 语句
      * @return 当前对象 实现链式编程
      */
     public SqlFunctionClient sql(String sql) {
-        super.setSql(sql, COMMAND_LINE_SQL_FUNCTION);
+        return sql(DataSourceIndex.DEFAULT_DATA_SOURCE_INDEX,sql);
+    }
+    /**
+     * 设置待执行 sql 语句
+     *
+     * @param sql sql 语句
+     * @return 当前对象 实现链式编程
+     */
+    public SqlFunctionClient sql(DataSourceIndex dataSource, String sql) {
+        super.setDataSource(dataSource);
+        super.setSql(sql, COMMAND_LINE_SQL_SELECT);
         return this;
     }
-
     /**
      * 设置输入参数 调用顺序要严格按照待执行的预编译 sql 的占位符 “?” 顺序调用 如待执行 sql 是没有占位符的完整 sql 则不应该调用该方法
      *
