@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 2021-07-02 14:52
  */
 public class MessageProtocolHead implements Serializable {
-    private String requestId;
+    private long requestId;
 
     private byte dataType;
 
@@ -26,15 +26,15 @@ public class MessageProtocolHead implements Serializable {
     public MessageProtocolHead() {
     }
 
-    public MessageProtocolHead(String requestId) {
+    public MessageProtocolHead(long requestId) {
         this.requestId = requestId;
     }
 
-    public String getRequestId() {
+    public long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(String requestId) {
+    public void setRequestId(long requestId) {
         this.requestId = requestId;
     }
 

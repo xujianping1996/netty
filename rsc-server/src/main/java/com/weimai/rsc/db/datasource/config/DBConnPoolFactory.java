@@ -1,6 +1,10 @@
 package com.weimai.rsc.db.datasource.config;
 
+import java.net.InetSocketAddress;
+
 import com.weimai.rsc.Configurations;
+import com.weimai.rsc.log.InternalLogger;
+import com.weimai.rsc.log.InternalLoggerFactory;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -18,6 +22,8 @@ public class DBConnPoolFactory {
     private static final HikariDataSource[] HIKARI_DATA_SOURCES;
     private static final HikariConfig config;
 
+    private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(DBConnPoolFactory.class);
+
     private static final int MAX_SOURCE_SIZE = 5;
 
     static {
@@ -25,7 +31,7 @@ public class DBConnPoolFactory {
         config = new HikariConfig();
         int size = CONFIGURATIONS.getDataSources().size();
         if (size > MAX_SOURCE_SIZE) {
-            System.out.println("当前版本最多支持5个数据源，配置文件中前五个数据源配置将生效，其余将被忽略！");
+            LOGGER.warn("当前版本最多支持5个数据源，配置文件中前五个数据源配置将生效，其余将被忽略！");
             size = MAX_SOURCE_SIZE;
         }
         HIKARI_DATA_SOURCES = new HikariDataSource[size];

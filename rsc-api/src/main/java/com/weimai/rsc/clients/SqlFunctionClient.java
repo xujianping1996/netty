@@ -3,7 +3,6 @@ package com.weimai.rsc.clients;
 import java.math.BigDecimal;
 import java.sql.Types;
 
-import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
@@ -11,7 +10,6 @@ import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.response.RespFunction;
 import com.weimai.rsc.util.HessianUtils;
 
-import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_FUNCTION;
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
 
 /**

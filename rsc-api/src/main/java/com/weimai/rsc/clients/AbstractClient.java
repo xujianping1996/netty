@@ -1,15 +1,14 @@
-package com.weimai.rsc;
+package com.weimai.rsc.clients;
 
-import java.util.UUID;
-
+import com.weimai.rsc.common.IDWorker;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.MessageProtocolHead;
 import com.weimai.rsc.msg.request.SQL;
-import com.weimai.rsc.pool.ChannelGroup;
-import com.weimai.rsc.pool.ChannelWrapper;
+import com.weimai.rsc.channel.ChannelGroup;
+import com.weimai.rsc.channel.ChannelWrapper;
 import com.weimai.rsc.util.HessianUtils;
 
 import static com.weimai.rsc.msg.request.SQL.*;
@@ -26,6 +25,8 @@ public abstract class AbstractClient<T> {
 
     protected final ChannelWrapper channelWrapper ;
     protected final MessageProtocol messageProtocol = new MessageProtocol();
+
+    private static final IDWorker ID_WORKER = IDWorker.ID_WORKER;
 
     protected String sql;
     protected byte sqlType;
@@ -88,17 +89,14 @@ public abstract class AbstractClient<T> {
     protected abstract T convertProtocol2JavaObj(MessageProtocol messageProtocol);
 
     private void convertMsg2Protocol() {
-        String requestId = UUID.randomUUID().toString().replace("-", "");
-        System.out.println(requestId);
         SQL sql = new SQL();
-
         sql.setDataSource(dataSource.getIndex());
         sql.setSqlLine(this.sql);
         sql.setParams(param);
 
         //封装协议头
         MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
-        messageProtocolHead.setRequestId(requestId);
+        messageProtocolHead.setRequestId(ID_WORKER.nextId());
         messageProtocolHead.setDataType(this.sqlType);
         //封装协议体
         MessageProtocolBody messageProtocolBody = new MessageProtocolBody();

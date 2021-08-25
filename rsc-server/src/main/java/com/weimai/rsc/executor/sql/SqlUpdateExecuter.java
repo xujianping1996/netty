@@ -27,7 +27,7 @@ import static com.weimai.rsc.msg.request.SQL.VALUE;
  */
 public class SqlUpdateExecuter extends AbstractNettySqlExecuter<Integer> implements Runnable {
 
-    public SqlUpdateExecuter(SQL sql, Channel channel, String requestId) {
+    public SqlUpdateExecuter(SQL sql, Channel channel, Long requestId) {
         super(sql, channel, requestId);
     }
 

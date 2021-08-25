@@ -1,16 +1,11 @@
 package com.weimai.rsc.clients;
 
-import java.util.List;
-import java.util.Map;
-
-import com.weimai.rsc.AbstractClient;
 import com.weimai.rsc.common.SqlParamType;
 import com.weimai.rsc.enumeration.DataSourceIndex;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 
 import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_SELECT;
-import static com.weimai.rsc.constant.ProtocolDataType.COMMAND_LINE_SQL_UPDATE;
 
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.

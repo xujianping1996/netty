@@ -35,7 +35,7 @@ import static com.weimai.rsc.msg.response.RespDbTable.COLUMN_TYPE;
  */
 public class SqlFunctionExecuter extends AbstractNettySqlExecuter<Object[]> implements Runnable {
 
-    public SqlFunctionExecuter(SQL sql, Channel channel, String requestId) {
+    public SqlFunctionExecuter(SQL sql, Channel channel, Long requestId) {
         super(sql, channel, requestId);
     }
 

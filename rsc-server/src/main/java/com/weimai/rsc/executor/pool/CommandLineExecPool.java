@@ -11,7 +11,7 @@ import com.weimai.rsc.executor.sql.AbstractNettySqlExecuter;
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * <p>
- * 命令行执行线程池
+ * 用户线程池
  *
  * @author DiZhi
  * @since 2021-07-20 13:52
@@ -19,15 +19,12 @@ import com.weimai.rsc.executor.sql.AbstractNettySqlExecuter;
 public class CommandLineExecPool {
 
     private static final Executor EXECUTOR = new ThreadPoolExecutor(50, 100, 30, TimeUnit.SECONDS,
-                                                                    new ArrayBlockingQueue<>(20), new ThreadFactory() {
-        @Override
-        public Thread newThread(Runnable r) {
-            Thread thread = new Thread(r);
-            thread.setName("commandLineExecPoolThread--");
-            return thread;
-        }
+                                                                    new ArrayBlockingQueue<>(20), r -> {
+        Thread thread = new Thread(r);
+        thread.setName("commandLineExecPoolThread--");
+        return thread;
     }, (r, executor) -> {
-        String requestId = "";
+        Long requestId = null;
         if (r instanceof AbstractNettySqlExecuter) {
             requestId = ((AbstractNettySqlExecuter<?>)r).getRequestId();
         }
@@ -35,7 +32,8 @@ public class CommandLineExecPool {
 
     });
 
-    private CommandLineExecPool(){}
+    private CommandLineExecPool() {
+    }
 
     public static void submit(Runnable runnable) {
         EXECUTOR.execute(runnable);

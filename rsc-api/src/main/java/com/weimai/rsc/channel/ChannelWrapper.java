@@ -1,15 +1,16 @@
-package com.weimai.rsc.pool;
+package com.weimai.rsc.channel;
 
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 
 import com.weimai.rsc.NettyClient;
+import com.weimai.rsc.log.InternalLogger;
+import com.weimai.rsc.log.InternalLoggerFactory;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
 import com.weimai.rsc.util.HessianUtils;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 
 import static com.weimai.rsc.constant.ProtocolDataType.ERROR;
 
@@ -25,6 +26,7 @@ public class ChannelWrapper {
     private final int port;
     private final MessageServiceImpl messageService;
     private final NettyClient nettyClient = NettyClient.getSingleInstance();
+    private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(ChannelWrapper.class);
 
     public ChannelWrapper(String ip,Integer port ){
         this.ip = ip;
@@ -44,14 +46,13 @@ public class ChannelWrapper {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         messageService.registerLock(requestMessage.getProtocolHead().getRequestId(), countDownLatch);
         this.channel.writeAndFlush(requestMessage);
-        //pool.recycleChannel(channelFuture);
-        System.out.println("客户端["+localHostAddress+":"+localPort+"]发送消息到服务端["+ip+":"+port+"]");
+        LOGGER.debug("客户端["+localHostAddress+":"+localPort+"]发送消息到服务端["+ip+":"+port+"]");
         try {
             countDownLatch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("客户端["+localHostAddress+":"+localPort+"]从服务端["+ip+":"+port+"]接受到消息");
+        LOGGER.debug("客户端["+localHostAddress+":"+localPort+"]从服务端["+ip+":"+port+"]接受到消息");
         MessageProtocol response = messageService.getResponse(requestMessage.getProtocolHead().getRequestId());
         if (ERROR == response.getProtocolHead().getDataType()) {
             throw new RuntimeException("server error ! info :" + Arrays
@@ -61,9 +62,9 @@ public class ChannelWrapper {
     }
 
 
-    void destroy(){
+    void destroy(String ip, int port){
         this.channel.close();
-        System.out.println("客户端已经关闭连接！");
+        LOGGER.info("客户端主动关闭["+ip+":"+port+"]连接！");
     }
 
 }

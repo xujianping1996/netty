@@ -16,7 +16,7 @@ import io.netty.channel.Channel;
  */
 public class SqlBatchExecuter extends AbstractNettySqlExecuter<Map<String,Object[][]>> implements  Runnable {
 
-    protected SqlBatchExecuter(SQL sql, Channel channel, String requestId) {
+    protected SqlBatchExecuter(SQL sql, Channel channel, Long requestId) {
         super(sql, channel, requestId);
     }
 

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.weimai.rsc.log.InternalLogger;
+import com.weimai.rsc.log.InternalLoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -18,34 +20,39 @@ import org.yaml.snakeyaml.Yaml;
 
 public class Configurations {
 
-    private static Configurations CONFIGURATIONS = new Configurations();
+    private InternalLogger logger = InternalLoggerFactory.getInstance(Configurations.class);
+
+    public static final Configurations CONFIGURATIONS = new Configurations();
+    private static final String CONFIGURATION_FILE_PATH
+            = "D:\\idea_project\\rsc-parent\\rsc-server\\src\\main\\resources\\cfg.yml";
 
     private Configurations() {
-        InputStream
-                input = null;
-        try {
-            input = new FileInputStream("D:\\idea_project\\rsc-parent\\rsc-server\\src\\main\\resources\\cfg.yml");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Yaml yaml = new Yaml();
-        Map<String ,Object> object = (Map<String ,Object>) yaml.load(input);
-        loadServerConfigurations(object);
-        loadDataSources(object);
 
+        try {
+            InputStream input = new FileInputStream(CONFIGURATION_FILE_PATH);
+            Yaml yaml = new Yaml();
+            Map<String, Object> object = (Map<String, Object>)yaml.load(input);
+            //加载服务器配置
+            loadServerConfigurations(object);
+            //加载数据源配置
+            loadDataSources(object);
+        } catch (FileNotFoundException e) {
+            logger.error("未找到 cfg.yml 配置文件！", e);
+        }
     }
 
     private void loadDataSources(Map<String, Object> object) {
+        logger.info("加载据源配置。");
         Object o = object.get("data-source");
         List<DataSource> dataSources = new ArrayList<>();
 
-        if (o instanceof List){
-            List<Map<String,Object>> dataSourceProps = (List<Map<String,Object>>)object.get("data-source");
+        if (o instanceof List) {
+            List<Map<String, Object>> dataSourceProps = (List<Map<String, Object>>)object.get("data-source");
             for (Map<String, Object> dataSourceProp : dataSourceProps) {
                 constructDataSource(dataSources, dataSourceProp);
             }
-        }else {
-            Map<String,Object> dataSourceProp = (Map<String,Object>)object.get("data-source");
+        } else {
+            Map<String, Object> dataSourceProp = (Map<String, Object>)object.get("data-source");
             constructDataSource(dataSources, dataSourceProp);
         }
         this.dataSources = dataSources;
@@ -58,19 +65,24 @@ public class Configurations {
         dataSource.setPassword(String.valueOf(dataSourceProp.get("password")));
         dataSource.setJdbcUrl(String.valueOf(dataSourceProp.get("jdbc-url")));
         dataSource.setUsername(String.valueOf(dataSourceProp.get("username")));
+        logger.info(String.valueOf(dataSource));
         dataSources.add(dataSource);
+
     }
 
     private void loadServerConfigurations(Map<String, Object> object) {
-        Map<String ,Object> serverProps = (Map<String ,Object>)object.get("server");
+        logger.info("加载服务器配置。");
+        Map<String, Object> serverProps = (Map<String, Object>)object.get("server");
         Server server = new Server();
         server.setPort((Integer)serverProps.get("port"));
         this.server = server;
+        logger.info(String.valueOf(server));
     }
 
-    public static Configurations getInstance(){
+    public static Configurations getInstance() {
         return CONFIGURATIONS;
     }
+
     private List<DataSource> dataSources;
 
     private Server server;
@@ -98,6 +110,7 @@ public class Configurations {
     public void setDataSource(List<DataSource> dataSources) {
         this.dataSources = dataSources;
     }
+
     public class Server {
         private Integer port;
 
@@ -108,7 +121,13 @@ public class Configurations {
         public void setPort(Integer port) {
             this.port = port;
         }
+
+        @Override
+        public String toString() {
+            return "Server{" + "port=" + port + '}';
+        }
     }
+
     public class DataSource {
         private String driverClass;
         private String datasourceType;
@@ -154,6 +173,13 @@ public class Configurations {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        @Override
+        public String toString() {
+            return "DataSource{" + "driverClass='" + driverClass + '\'' + ", datasourceType='" + datasourceType + '\''
+                   + ", jdbcUrl='" + jdbcUrl + '\'' + ", username='" + username + '\'' + ", password='" + password
+                   + '\'' + '}';
         }
     }
 }

@@ -25,73 +25,7 @@ public class RSCClientTest {
                     for (int i = 0;i<10;i++) {
                         String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
                          String IP = "127.0.0.1";
-                         int PORT = 8088;
-                        //String sql = "SELECT * FROM request_log";
-                        String method_name = "open_third_user";
-                        Long institution_id = 100214L;
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
-                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
-                        //System.out.println(execute.size());
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-
-                    }
-                    for (int i = 0;i<10;i++) {
-                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-                        String IP = "127.0.0.1";
-                        int PORT = 8089;
-                        //String sql = "SELECT * FROM request_log";
-                        String method_name = "open_third_user";
-                        Long institution_id = 100214L;
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
-                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
-                        //System.out.println(execute.size());
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-
-                    }
-                    for (int i = 0;i<10;i++) {
-                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-                        String IP = "127.0.0.1";
-                        int PORT = 8090;
-                        //String sql = "SELECT * FROM request_log";
-                        String method_name = "open_third_user";
-                        Long institution_id = 100214L;
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-                        List<Map<String, String>> execute = new SqlQueryClient(IP, PORT).sql(sql).param(institution_id).param(method_name).execute();
-                        //List<Map<String, String>> execute = new QuerySqlClient(IP, PORT).sql(sql).execute();
-                        //System.out.println(execute.size());
-                        //try {
-                        //    Thread.sleep(Math.round((Math.random()+1) * 1000));
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();
-                        //}
-
-                    }
-                    for (int i = 0;i<10;i++) {
-                        String sql = "SELECT * FROM request_log WHERE institution_id = ? AND method_name = ?";
-                        String IP = "127.0.0.1";
-                        int PORT = 8091;
+                         int PORT = 8091;
                         //String sql = "SELECT * FROM request_log";
                         String method_name = "open_third_user";
                         Long institution_id = 100214L;

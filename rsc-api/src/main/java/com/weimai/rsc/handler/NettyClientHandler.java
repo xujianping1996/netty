@@ -1,11 +1,12 @@
 package com.weimai.rsc.handler;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 
+import com.weimai.rsc.log.InternalLogger;
+import com.weimai.rsc.log.InternalLoggerFactory;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
-import com.weimai.rsc.pool.ChannelGroup;
+import com.weimai.rsc.channel.ChannelGroup;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,6 +21,8 @@ import io.netty.handler.timeout.IdleStateEvent;
  * @since 2021-06-21 20:18
  */
 public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProtocol> {
+
+    private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(NettyClientHandler.class);
     private final MessageServiceImpl messageService;
     private final ChannelGroup channelGroup;
     public NettyClientHandler() {
@@ -27,22 +30,21 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
         channelGroup = ChannelGroup.getSingleInstance();
     }
 
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) {
         InetSocketAddress localSocketAddress = (InetSocketAddress)ctx.channel().localAddress();
         int localPort = localSocketAddress.getPort();
         String localAddress = localSocketAddress.getAddress().getHostAddress();
         InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
         int port = socketAddress.getPort();
         String hostAddress = socketAddress.getAddress().getHostAddress();
-        System.out.println("客户端["+localAddress+":"+localPort+"]->服务器["+hostAddress+":"+port+"]");
+        LOGGER.info("客户端["+localAddress+":"+localPort+"]->服务器["+hostAddress+":"+port+"]");
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) {
         InetSocketAddress socketAddress = (InetSocketAddress)ctx.channel().remoteAddress();
-
-        System.out.println(socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort()+"已断开链接");
         ctx.close();
+        LOGGER.info("连接["+socketAddress.getAddress().getHostAddress()+":"+socketAddress.getPort()+"]已断开");
     }
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, MessageProtocol messageProtocol) {
@@ -50,7 +52,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
     }
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
         Channel channel = ctx.channel();
         InetSocketAddress remoteAddress = (InetSocketAddress)channel.remoteAddress();
         String ip = remoteAddress.getAddress().getHostAddress();
@@ -71,8 +73,7 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
                     eventType = "读写空闲";
                     break;
             }
-
-            System.out.println(ctx.channel().remoteAddress() + "超时事件:" + eventType);
+            LOGGER.info(ctx.channel().remoteAddress() + "超时事件:" + eventType);
             channelGroup.destroyChannel(ip,port);
             ctx.channel().close();
         }

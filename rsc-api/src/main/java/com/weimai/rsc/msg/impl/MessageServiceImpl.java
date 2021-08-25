@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import com.weimai.rsc.common.IDWorker;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageService;
 import com.weimai.rsc.msg.MessageProtocolBody;
@@ -18,12 +19,12 @@ import com.weimai.rsc.msg.MessageProtocolHead;
  * @author DiZhi
  * @since 2021-07-07 11:24
  */
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl {
     private static final MessageServiceImpl messageService = new MessageServiceImpl();
 
-    private final Map<String ,MessageProtocol> messageProtocols ;
+    private final Map<Long ,MessageProtocol> messageProtocols ;
 
-    private final Map<String ,CountDownLatch> locks ;
+    private final Map<Long ,CountDownLatch> locks ;
 
 
     public static MessageServiceImpl getSingleInstance(){
@@ -35,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
         locks = new ConcurrentHashMap<>();
     }
 
-    public void registerLock(String id,CountDownLatch latch){
+    public void registerLock(long id,CountDownLatch latch){
         locks.put(id,latch);
     };
 
@@ -45,63 +46,63 @@ public class MessageServiceImpl implements MessageService {
         latch.countDown();
     }
 
-    public MessageProtocol getResponse(String requestId){
+    public MessageProtocol getResponse(Long requestId){
         MessageProtocol messageProtocol = messageProtocols.get(requestId);
         if (messageProtocol == null) {
             throw new RuntimeException("响应为空！");
         }
         return messageProtocol;
     }
-    public MessageProtocol loadMessage(String requestId){
-        return messageProtocols.remove(requestId);
-    }
+    //public MessageProtocol loadMessage(String requestId){
+    //    return messageProtocols.remove(requestId);
+    //}
 
-    @Override
-    public Object send(String message) {
-        MessageProtocol request = getMessageProtocol();
+    //@Override
+    //public Object send(String message) {
+    //    MessageProtocol request = getMessageProtocol();
+    //
+    //    convertMsg2Protocol(message,request);
+    //
+    //    MessageProtocol response = toSend(request);
+    //    return null;
+    //}
 
-        convertMsg2Protocol(message,request);
+    //private MessageProtocol toSend(MessageProtocol request) {
+    //
+    //
+    //    return null;
+    //}
 
-        MessageProtocol response = toSend(request);
-        return null;
-    }
-
-    private MessageProtocol toSend(MessageProtocol request) {
-
-
-        return null;
-    }
-
-    private MessageProtocol getMessageProtocol() {
-        return new MessageProtocol();
-    }
-
-    private void convertMsg2Protocol(String message, MessageProtocol messageProtocol) {
-        //Channel channel = channelFuture.channel();
-        String requestId = UUID.randomUUID().toString().replace("-", "");
-        byte[] sqlBytes = message.getBytes(StandardCharsets.UTF_8);
-        //封装协议头
-        MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
-        messageProtocolHead.setRequestId(requestId);
-        //封装协议体
-        MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
-        messageProtocolBody.setContent(sqlBytes);
-        //封装协议包
-        messageProtocol.setProtocolBody(messageProtocolBody);
-        messageProtocol.setProtocolHead(messageProtocolHead);
-        //messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
-        //messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
-        //channel.writeAndFlush(messageProtocol);
-    }
-
-    private boolean isTimeout(){
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        boolean await = false;
-        try {
-            await = countDownLatch.await(30, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return await;
-    };
+    //private MessageProtocol getMessageProtocol() {
+    //    return new MessageProtocol();
+    //}
+    //
+    //private void convertMsg2Protocol(String message, MessageProtocol messageProtocol) {
+    //    //Channel channel = channelFuture.channel();
+    //    //String requestId = UUID.randomUUID().toString().replace("-", "");
+    //    byte[] sqlBytes = message.getBytes(StandardCharsets.UTF_8);
+    //    //封装协议头
+    //    MessageProtocolHead messageProtocolHead = new MessageProtocolHead();
+    //    messageProtocolHead.setRequestId(ID_WORKER.nextId());
+    //    //封装协议体
+    //    MessageProtocolBody messageProtocolBody = new MessageProtocolBody();
+    //    messageProtocolBody.setContent(sqlBytes);
+    //    //封装协议包
+    //    messageProtocol.setProtocolBody(messageProtocolBody);
+    //    messageProtocol.setProtocolHead(messageProtocolHead);
+    //    //messageProtocol.setBodyLength(HessianUtils.write(protocolBody).length);
+    //    //messageProtocol.setHeadLength(HessianUtils.write(protocolHead).length);
+    //    //channel.writeAndFlush(messageProtocol);
+    //}
+    //
+    //private boolean isTimeout(){
+    //    CountDownLatch countDownLatch = new CountDownLatch(1);
+    //    boolean await = false;
+    //    try {
+    //        await = countDownLatch.await(30, TimeUnit.SECONDS);
+    //    } catch (InterruptedException e) {
+    //        e.printStackTrace();
+    //    }
+    //    return await;
+    //};
 }
