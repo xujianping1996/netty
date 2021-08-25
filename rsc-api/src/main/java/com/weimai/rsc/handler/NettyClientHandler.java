@@ -6,7 +6,7 @@ import com.weimai.rsc.log.InternalLogger;
 import com.weimai.rsc.log.InternalLoggerFactory;
 import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.impl.MessageServiceImpl;
-import com.weimai.rsc.channel.ChannelGroup;
+import com.weimai.rsc.channel.ChannelWrapperFactory;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -15,7 +15,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 /**
  * Copyright (c) 2017 Choice, Inc. All Rights Reserved. Choice Proprietary and Confidential.
  * <p>
- * 发送消息工具类
+ * netty handler
  *
  * @author DiZhi
  * @since 2021-06-21 20:18
@@ -23,11 +23,11 @@ import io.netty.handler.timeout.IdleStateEvent;
 public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProtocol> {
 
     private static final InternalLogger LOGGER = InternalLoggerFactory.getInstance(NettyClientHandler.class);
+
     private final MessageServiceImpl messageService;
-    private final ChannelGroup channelGroup;
+
     public NettyClientHandler() {
         messageService = MessageServiceImpl.getSingleInstance();
-        channelGroup = ChannelGroup.getSingleInstance();
     }
 
     public void channelActive(ChannelHandlerContext ctx) {
@@ -74,8 +74,8 @@ public class NettyClientHandler extends SimpleChannelInboundHandler<MessageProto
                     break;
             }
             LOGGER.info(ctx.channel().remoteAddress() + "超时事件:" + eventType);
-            channelGroup.destroyChannel(ip,port);
-            ctx.channel().close();
+            ChannelWrapperFactory.destroyInstance(ip,port);
+            //ctx.channel().close();
         }
     }
 }

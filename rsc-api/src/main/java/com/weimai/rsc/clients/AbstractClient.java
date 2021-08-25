@@ -7,7 +7,7 @@ import com.weimai.rsc.msg.MessageProtocol;
 import com.weimai.rsc.msg.MessageProtocolBody;
 import com.weimai.rsc.msg.MessageProtocolHead;
 import com.weimai.rsc.msg.request.SQL;
-import com.weimai.rsc.channel.ChannelGroup;
+import com.weimai.rsc.channel.ChannelWrapperFactory;
 import com.weimai.rsc.channel.ChannelWrapper;
 import com.weimai.rsc.util.HessianUtils;
 
@@ -39,7 +39,7 @@ public abstract class AbstractClient<T> {
     protected static final String PLACEHOLDER = "?";
 
     public AbstractClient(String ip, int port) {
-        channelWrapper = ChannelGroup.getSingleInstance().getChannel(ip,port);
+        channelWrapper = ChannelWrapperFactory.getInstance(ip, port);
     }
     protected void setDataSource(DataSourceIndex dataSourceIndex){
         this.dataSource = dataSourceIndex;
