@@ -5,12 +5,12 @@ server:
 data-source:
   - driver-class: com.mysql.cj.jdbc.Driver
     datasource-type: com.zaxxer.hikari.HikariDataSource
-    jdbc-url: jdbc:mysql://192.168.1.93:3306/wmtzt_moa_01?Unicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&socketTimeout=1000&allowMultiQueries=true
-    username: test_moa_01
-    password: Mks7u2jhs9b
+    jdbc-url: 
+    username: 
+    password: 
 
   - driver-class: com.mysql.cj.jdbc.Driver
     datasource-type: com.zaxxer.hikari.HikariDataSource
-    jdbc-url: jdbc:mysql://192.168.1.93:3306/wmtzt_moa_01?Unicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&socketTimeout=1000&allowMultiQueries=true
-    username: test_moa_01
-    password: Mks7u2jhs9b
+    jdbc-url: 
+    username: 
+    password: 
